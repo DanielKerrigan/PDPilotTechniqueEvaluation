@@ -1,0 +1,15 @@
+name: pdpilot-eval
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - numpy
+  - pandas
+  - joblib
+  - scikit-learn
+  - xgboost
+  - tqdm
+  - pip
+  - notebook
+  - pip:
+      - pmlb

@@ -1,1 +1,0 @@
-from ice.ice import calculate_ice
