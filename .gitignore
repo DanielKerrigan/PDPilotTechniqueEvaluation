@@ -1,7 +1,7 @@
 # My additions
 .DS_Store
 data/*/*.json
-#data/*/*.csv
+data/*/*.csv
 .vscode
 
 # Byte-compiled / optimized / DLL files
