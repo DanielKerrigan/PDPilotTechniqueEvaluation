@@ -1,8 +1,11 @@
 # My additions
 .DS_Store
-data/*/*.json
-data/*/*.csv
 .vscode
+data/datasets
+data/models
+data/pdpilot
+data/*.json
+filtering/labeling/static/*.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
