@@ -5,6 +5,7 @@ data/datasets
 data/models
 data/pdpilot
 data/*.json
+filtering/*.json
 filtering/labeling/static/*.json
 
 # Byte-compiled / optimized / DLL files
