@@ -5,11 +5,14 @@ dependencies:
   - python=3.10
   - numpy
   - pandas
-  - joblib
-  - scikit-learn
-  - xgboost
-  - tqdm
-  - pip
   - notebook
+  - scikit-learn
+  - nodejs
+  - altair
+  - matplotlib
+  - optuna
+  - lightgbm
+  - pip
   - pip:
       - pmlb
+      - pdpilot
