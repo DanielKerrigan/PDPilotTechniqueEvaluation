@@ -6,7 +6,7 @@ from train_models import train_models
 import pandas as pd
 
 
-def main(trial):
+def main(trial, jobs):
     """Main method for script."""
 
     if trial:
@@ -86,9 +86,9 @@ def main(trial):
             "twonorm",
         ]
 
-    regression_results = train_models(regression_datasets, "regression")
+    regression_results = train_models(regression_datasets, "regression", jobs=jobs)
 
-    classification_results = train_models(classification_datasets, "binary")
+    classification_results = train_models(classification_datasets, "binary", jobs=jobs)
 
     results = pd.concat([regression_results, classification_results]).reset_index(
         drop=True
@@ -106,6 +106,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "-t", "--trial", action="store_true", help="trial run with different datasets"
     )
+    parser.add_argument(
+        "-j", "--jobs", help="number of jobs to use", default=1, type=int
+    )
     args = parser.parse_args()
 
-    main(args.trial)
+    main(args.trial, args.jobs)

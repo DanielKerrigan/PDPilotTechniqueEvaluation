@@ -7,7 +7,9 @@ from optuna.integration.lightgbm import LightGBMTunerCV
 from sklearn.model_selection import KFold, StratifiedKFold
 
 
-def train(X, y, features, objective, splitter, early_stopping_rounds=10, seed=1):
+def train(
+    X, y, features, objective, splitter, early_stopping_rounds=10, seed=1, jobs=1
+):
     """Train a LightGBM model with parameters chosen by cross-validation."""
 
     train_set = lgb.Dataset(X, label=y, params={"verbose": -1})
@@ -19,7 +21,7 @@ def train(X, y, features, objective, splitter, early_stopping_rounds=10, seed=1)
         "deterministic": True,
         "force_col_wise": True,
         "seed": seed,
-        "num_threads": 8,
+        "num_threads": jobs,
     }
 
     tuner = LightGBMTunerCV(
@@ -52,7 +54,7 @@ def train(X, y, features, objective, splitter, early_stopping_rounds=10, seed=1)
 
 
 def nested_cross_validation(
-    X, y, features, objective, outer_splitter, inner_splitter, seed=1
+    X, y, features, objective, outer_splitter, inner_splitter, seed=1, jobs=1
 ):
     """Performs nested cross validation."""
 
@@ -72,6 +74,7 @@ def nested_cross_validation(
             objective=objective,
             splitter=inner_splitter,
             seed=seed + i,
+            jobs=jobs,
         )
 
         y_pred = booster.predict(X_eval)
@@ -93,7 +96,14 @@ def nested_cross_validation(
 
 
 def nested_cross_validation_and_train(
-    X, y, features, objective, n_outer_splits=5, n_inner_splits=5, seed=1
+    X,
+    y,
+    features,
+    objective,
+    n_outer_splits=5,
+    n_inner_splits=5,
+    seed=1,
+    jobs=1,
 ):
     """Perform nested cross-validation and then train the model on the whole dataset."""
 
@@ -112,6 +122,7 @@ def nested_cross_validation_and_train(
         outer_splitter=outer_splitter,
         inner_splitter=inner_splitter,
         seed=seed,
+        jobs=jobs,
     )
 
     booster = train(
@@ -121,6 +132,7 @@ def nested_cross_validation_and_train(
         objective=objective,
         splitter=inner_splitter,
         seed=seed,
+        jobs=jobs,
     )
 
     return results, booster

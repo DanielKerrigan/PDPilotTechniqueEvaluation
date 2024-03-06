@@ -28,7 +28,7 @@ def get_time():
     return datetime.now().strftime("%I:%M:%S")
 
 
-def train_models(datasets, objective):
+def train_models(datasets, objective, jobs):
     """Train a model on each dataset and calculate the PDP and ICE plots."""
 
     mean_scores = []
@@ -57,7 +57,9 @@ def train_models(datasets, objective):
 
         print(f"{get_time()} Training model")
 
-        results, booster = nested_cross_validation_and_train(X, y, features, objective)
+        results, booster = nested_cross_validation_and_train(
+            X, y, features, objective, jobs=jobs
+        )
 
         model_path = f"models/{dataset}.txt"
         booster.save_model(model_path)
@@ -79,7 +81,7 @@ def train_models(datasets, objective):
             predict=booster.predict,
             features=features,
             resolution=20,
-            n_jobs=8,
+            n_jobs=jobs,
             seed=1,
             output_path=pd_path,
         )
