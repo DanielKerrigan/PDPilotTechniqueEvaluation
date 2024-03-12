@@ -1,9 +1,7 @@
 # My additions
 .DS_Store
 .vscode
-data/datasets
-data/models
-data/pdpilot
+data/results
 filtering/*.json
 filtering/labeling/static/*.json
 
