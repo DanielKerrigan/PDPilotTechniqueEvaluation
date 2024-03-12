@@ -1,100 +1,131 @@
 """Download datasets, train models, and calculate PDP and ICE plots."""
 
 import argparse
+from datetime import datetime
+from pathlib import Path
+import json
 import optuna
-from train_models import train_models
-import pandas as pd
+from pmlb import fetch_data
+from gbm import nested_cross_validation_and_train
+from sklearn.metrics import mean_squared_error, log_loss
+import numpy as np
+from pdpilot import partial_dependence
 
 
-def main(trial, jobs):
-    """Main method for script."""
+def get_time():
+    """Return the current time as a string."""
+    return datetime.now().strftime("%I:%M:%S")
 
-    if trial:
-        results_file = "trial_datasets_and_models.json"
 
-        regression_datasets = [
-            "522_pm10",
-            "547_no2",
-            "583_fri_c1_1000_50",
-            "666_rmftsa_ladata",
-            "feynman_II_36_38",
-            "feynman_test_6",
-        ][0:2]
+def get_baseline_score(y_true, objective):
+    """Get the score for a baseline model.
+    For binary classification, this means assigning probabilities to the classes
+    based on how often they occur in the dataset.
+    For regression, this means predicting the mean value."""
 
-        classification_datasets = [
-            "breast_w",
-            "crx",
-            "GAMETES_Epistasis_3_Way_20atts_0.2H_EDM_1_1",
-            "irish",
-            "monk1",
-            "monk2",
-            "monk3",
-            "pima",
-            "profb",
-            "threeOf9",
-            "tic_tac_toe",
-            "tokyo1",
-            "wdbc",
-            "xd6",
-        ][0:2]
+    y_pred = np.array([y_true.mean()] * y_true.shape[0])
 
+    if objective == "binary":
+        return log_loss(y_true, y_pred)
     else:
-        results_file = "datasets_and_models.json"
+        return mean_squared_error(y_true, y_pred)
 
-        regression_datasets = [
-            "1191_BNG_pbc",
-            "1193_BNG_lowbwt",
-            "1196_BNG_pharynx",
-            "1199_BNG_echoMonths",
-            "1201_BNG_breastTumor",
-            "1203_BNG_pwLinear",
-            "197_cpu_act",
-            "215_2dplanes",
-            "225_puma8NH",
-            "344_mv",
-            "503_wind",
-            "529_pollen",
-            "537_houses",
-            "564_fried",
-            "574_house_16H",
-            "588_fri_c4_1000_100",
-            "feynman_I_9_18",
-            "feynman_test_1",
-        ]
 
-        classification_datasets = [
-            "adult",
-            "banana",
-            "chess",
-            "churn",
-            "clean2",
-            "coil2000",
-            "dis",
-            "GAMETES_Epistasis_2_Way_20atts_0.1H_EDM_1_1",
-            "GAMETES_Heterogeneity_20atts_1600_Het_0.4_0.2_50_EDM_2_001",
-            "german",
-            "Hill_Valley_with_noise",
-            "hypothyroid",
-            "magic",
-            "mofn_3_7_10",
-            "mushroom",
-            "parity5+5",
-            "phoneme",
-            "ring",
-            "spambase",
-            "titanic",
-            "twonorm",
-        ]
+def create_dirs(output):
+    "Create directories to write output files to."
 
-    regression_results = train_models(regression_datasets, "regression", jobs=jobs)
+    output_dir = Path(output).resolve()
 
-    classification_results = train_models(classification_datasets, "binary", jobs=jobs)
+    datasets_dir = output_dir / "datasets"
+    datasets_dir.mkdir(exist_ok=True)
 
-    results = pd.concat([regression_results, classification_results]).reset_index(
-        drop=True
+    models_dir = output_dir / "models"
+    models_dir.mkdir(exist_ok=True)
+
+    pdpilot_dir = output_dir / "pdpilot"
+    pdpilot_dir.mkdir(exist_ok=True)
+
+    return datasets_dir, models_dir, pdpilot_dir
+
+
+def load_dataset(dataset_group, index, datasets_dir):
+    "Download the dataset."
+
+    datasets = json.loads(Path("datasets.json").read_bytes())
+    dataset_info = datasets[dataset_group][index]
+    dataset = dataset_info["name"]
+    objective = dataset_info["objective"]
+
+    df_all = fetch_data(dataset_info["name"], local_cache_dir=datasets_dir.as_posix())
+    df_X = df_all.drop(columns=["target"])
+    features = list(df_X.columns)
+
+    # convert float columns that contain only integers to integers
+    for feature in features:
+        as_int = df_X[feature].astype(int)
+        if np.array_equal(df_X[feature], as_int):
+            df_X[feature] = as_int
+
+    X = df_X.to_numpy()
+    y = df_all["target"].to_numpy()
+
+    return dataset, objective, df_X, X, y, features
+
+
+def main(dataset_group, index, output, jobs):
+    """Download the dataset, train the model, and calculate the PDP and  ICE plots."""
+
+    print(f"{get_time()} {dataset_group=} {index=} {output=} {jobs=}")
+
+    # make output directories
+
+    print(f"\n{get_time()} Making output directories")
+    datasets_dir, models_dir, pdpilot_dir = create_dirs(output)
+
+    # load the dataset
+
+    print(f"\n{get_time()} Loading dataset")
+    dataset, objective, df_X, X, y, features = load_dataset(
+        dataset_group, index, datasets_dir
     )
 
-    results.to_json(results_file, orient="records", indent=2, index=False)
+    # train the model
+
+    print(f"\n{get_time()} Training the model")
+
+    results, booster = nested_cross_validation_and_train(
+        X, y, features, objective, jobs=jobs
+    )
+    booster.save_model(models_dir / f"{dataset}.txt")
+
+    baseline_score = get_baseline_score(y, objective)
+
+    print(
+        f"\t{dataset=}",
+        f"\t{objective=}",
+        f"\tstd_score={results['std_score']}",
+        f"\tmean_score={results['mean_score']}",
+        f"\tbaseline_score={baseline_score}",
+        sep="\n",
+    )
+
+    # calculate PDP and ICE plots
+
+    print(f"\n{get_time()} Calculating PDP and ICE plots")
+
+    pd_path = pdpilot_dir / f"{dataset}.json"
+
+    df_pd = df_X if df_X.shape[0] <= 2000 else df_X.sample(2000, random_state=1)
+
+    partial_dependence(
+        df=df_pd,
+        predict=booster.predict,
+        features=features,
+        resolution=20,
+        n_jobs=jobs,
+        seed=1,
+        output_path=pd_path.as_posix(),
+    )
 
 
 if __name__ == "__main__":
@@ -104,11 +135,15 @@ if __name__ == "__main__":
         description="Download datasets, train models, and calculate PDP and ICE plots.",
     )
     parser.add_argument(
-        "-t", "--trial", action="store_true", help="trial run with different datasets"
+        "-d", "--debug", action="store_true", help="run on debug datasets"
     )
+    parser.add_argument("-i", "--index", help="dataset index", type=int)
+    parser.add_argument("-o", "--output", default=".", help="output directory")
     parser.add_argument(
         "-j", "--jobs", help="number of jobs to use", default=1, type=int
     )
     args = parser.parse_args()
 
-    main(args.trial, args.jobs)
+    DATASET_GROUP = "debug" if args.debug else "actual"
+
+    main(DATASET_GROUP, args.index, args.output, args.jobs)

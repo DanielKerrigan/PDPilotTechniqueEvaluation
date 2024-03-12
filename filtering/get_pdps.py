@@ -2,26 +2,19 @@
 
 import argparse
 import json
+from pathlib import Path
 
 
-def read_json(path):
-    """Read JSON file."""
-    with open(path, "r", encoding="utf-8") as fp:
-        return json.load(fp)
-
-
-def write_json(path, data):
-    """Write to JSON file."""
-    with open(path, "w", encoding="utf-8") as fp:
-        return json.dump(data, fp)
-
-
-def get_pdps(datasets_and_models):
+def get_pdps(pdpilot_paths):
     """Get all PDPs in one list."""
     pdps = []
 
-    for info in datasets_and_models:
-        pd_data = read_json(f'../data/{info["pd_data"]}')
+    for pd_path in pdpilot_paths:
+        if not pd_path.exists():
+            print(f"{pd_path} does not exist")
+            continue
+
+        pd_data = json.loads(pd_path.read_bytes())
         feature_info = pd_data["feature_info"]
         for owp in pd_data["one_way_pds"]:
             # don't include binary features or flat PDPs
@@ -36,28 +29,33 @@ def get_pdps(datasets_and_models):
     return pdps
 
 
-def main(trial):
+def main(dataset_group, input_dir, output):
     """Main method for script."""
 
-    if trial:
-        input_file = "../data/trial_datasets_and_models.json"
-        output_file = "trial_pdps.json"
-    else:
-        input_file = "../data/datasets_and_models.json"
-        output_file = "pdps.json"
+    input_path = Path(input_dir).resolve()
+    output_path = Path(output).resolve()
 
-    datasets_and_models = read_json(input_file)
-    pdps = get_pdps(datasets_and_models)
-    write_json(output_file, pdps)
+    datasets = json.loads(Path("../data/datasets.json").read_bytes())
+
+    pdpilot_paths = [input_path / f"{x['name']}.json" for x in datasets[dataset_group]]
+
+    pdps = get_pdps(pdpilot_paths)
+    output_path.write_text(json.dumps(pdps), encoding="UTF-8")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Combine all PDPs into one file.",
     )
+
     parser.add_argument(
-        "-t", "--trial", action="store_true", help="trial run with different datasets"
+        "-d", "--debug", action="store_true", help="run on debug datasets"
     )
+    parser.add_argument("-p", "--pdpilot", default=".", help="pdpilot data directory")
+    parser.add_argument("-o", "--output", default=".", help="output path")
+
     args = parser.parse_args()
 
-    main(args.trial)
+    DATASET_GROUP = "debug" if args.debug else "actual"
+
+    main(DATASET_GROUP, args.pdpilot, args.output)
