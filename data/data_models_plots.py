@@ -55,9 +55,21 @@ def load_dataset(dataset_group, index, datasets_dir):
     dataset_info = datasets[dataset_group][index]
     dataset = dataset_info["name"]
     objective = dataset_info["objective"]
+    exclude_features = dataset_info["exclude_features"]
 
     df_all = fetch_data(dataset_info["name"], local_cache_dir=datasets_dir.as_posix())
-    df_X = df_all.drop(columns=["target"])
+
+    df_reduced = (
+        df_all if df_all.shape[0] <= 200_000 else df_all.sample(200_000, random_state=1)
+    )
+
+    df_X = df_reduced.drop(columns=["target"] + exclude_features)
+    y = df_reduced["target"].to_numpy()
+
+    # drop columns that only have one unique value
+    nunique = df_X.nunique()
+    df_X.drop(columns=nunique[nunique == 1].index, inplace=True)
+
     features = list(df_X.columns)
 
     # convert float columns that contain only integers to integers
@@ -67,7 +79,6 @@ def load_dataset(dataset_group, index, datasets_dir):
             df_X[feature] = as_int
 
     X = df_X.to_numpy()
-    y = df_all["target"].to_numpy()
 
     return dataset, objective, df_X, X, y, features
 
@@ -91,7 +102,7 @@ def main(dataset_group, index, output, jobs):
 
     # train the model
 
-    print(f"\n{get_time()} Training the model")
+    print(f"\n{get_time()} Training the model on {dataset}")
 
     results, booster = nested_cross_validation_and_train(
         X, y, features, objective, jobs=jobs
@@ -125,6 +136,7 @@ def main(dataset_group, index, output, jobs):
         n_jobs=jobs,
         seed=1,
         output_path=pd_path.as_posix(),
+        logging_level="WARNING",
     )
 
 

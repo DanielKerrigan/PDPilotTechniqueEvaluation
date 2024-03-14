@@ -1,74 +1,133 @@
 {
   "debug": [
-    { "name": "522_pm10", "objective": "regression" },
-    { "name": "547_no2", "objective": "regression" },
-    { "name": "583_fri_c1_1000_50", "objective": "regression" },
-    { "name": "666_rmftsa_ladata", "objective": "regression" },
-    { "name": "feynman_II_36_38", "objective": "regression" },
-    { "name": "feynman_test_6", "objective": "regression" },
-    { "name": "breast_w", "objective": "binary" },
-    { "name": "crx", "objective": "binary" },
+    { "name": "522_pm10", "objective": "regression", "exclude_features": [] },
+    { "name": "547_no2", "objective": "regression", "exclude_features": [] },
+    {
+      "name": "583_fri_c1_1000_50",
+      "objective": "regression",
+      "exclude_features": []
+    },
+    {
+      "name": "666_rmftsa_ladata",
+      "objective": "regression",
+      "exclude_features": []
+    },
+    { "name": "breast_w", "objective": "binary", "exclude_features": [] },
+    { "name": "crx", "objective": "binary", "exclude_features": [] },
     {
       "name": "GAMETES_Epistasis_3_Way_20atts_0.2H_EDM_1_1",
-      "objective": "binary"
+      "objective": "binary",
+      "exclude_features": []
     },
-    { "name": "irish", "objective": "binary" },
-    { "name": "monk1", "objective": "binary" },
-    { "name": "monk2", "objective": "binary" },
-    { "name": "monk3", "objective": "binary" },
-    { "name": "pima", "objective": "binary" },
-    { "name": "profb", "objective": "binary" },
-    { "name": "threeOf9", "objective": "binary" },
-    { "name": "tic_tac_toe", "objective": "binary" },
-    { "name": "tokyo1", "objective": "binary" },
-    { "name": "wdbc", "objective": "binary" },
-    { "name": "xd6", "objective": "binary" }
+    { "name": "irish", "objective": "binary", "exclude_features": [] },
+    { "name": "monk1", "objective": "binary", "exclude_features": [] },
+    { "name": "monk2", "objective": "binary", "exclude_features": [] },
+    { "name": "monk3", "objective": "binary", "exclude_features": [] },
+    { "name": "pima", "objective": "binary", "exclude_features": [] },
+    { "name": "profb", "objective": "binary", "exclude_features": [] },
+    { "name": "threeOf9", "objective": "binary", "exclude_features": [] },
+    { "name": "tic_tac_toe", "objective": "binary", "exclude_features": [] },
+    { "name": "tokyo1", "objective": "binary", "exclude_features": [] },
+    { "name": "wdbc", "objective": "binary", "exclude_features": [] },
+    { "name": "xd6", "objective": "binary", "exclude_features": [] }
   ],
   "actual": [
-    { "name": "1191_BNG_pbc", "objective": "regression" },
-    { "name": "1193_BNG_lowbwt", "objective": "regression" },
-    { "name": "1196_BNG_pharynx", "objective": "regression" },
-    { "name": "1199_BNG_echoMonths", "objective": "regression" },
-    { "name": "1201_BNG_breastTumor", "objective": "regression" },
-    { "name": "1203_BNG_pwLinear", "objective": "regression" },
-    { "name": "197_cpu_act", "objective": "regression" },
-    { "name": "215_2dplanes", "objective": "regression" },
-    { "name": "225_puma8NH", "objective": "regression" },
-    { "name": "344_mv", "objective": "regression" },
-    { "name": "503_wind", "objective": "regression" },
-    { "name": "529_pollen", "objective": "regression" },
-    { "name": "537_houses", "objective": "regression" },
-    { "name": "564_fried", "objective": "regression" },
-    { "name": "574_house_16H", "objective": "regression" },
-    { "name": "588_fri_c4_1000_100", "objective": "regression" },
-    { "name": "feynman_I_9_18", "objective": "regression" },
-    { "name": "feynman_test_1", "objective": "regression" },
-    { "name": "adult", "objective": "binary" },
-    { "name": "banana", "objective": "binary" },
-    { "name": "chess", "objective": "binary" },
-    { "name": "churn", "objective": "binary" },
-    { "name": "clean2", "objective": "binary" },
-    { "name": "coil2000", "objective": "binary" },
-    { "name": "dis", "objective": "binary" },
+    {
+      "name": "1191_BNG_pbc",
+      "objective": "regression",
+      "exclude_features": []
+    },
+    {
+      "name": "1193_BNG_lowbwt",
+      "objective": "regression",
+      "exclude_features": []
+    },
+    {
+      "name": "1196_BNG_pharynx",
+      "objective": "regression",
+      "exclude_features": []
+    },
+    {
+      "name": "1199_BNG_echoMonths",
+      "objective": "regression",
+      "exclude_features": []
+    },
+    {
+      "name": "1201_BNG_breastTumor",
+      "objective": "regression",
+      "exclude_features": []
+    },
+    {
+      "name": "1203_BNG_pwLinear",
+      "objective": "regression",
+      "exclude_features": []
+    },
+    {
+      "name": "197_cpu_act",
+      "objective": "regression",
+      "exclude_features": []
+    },
+    {
+      "name": "215_2dplanes",
+      "objective": "regression",
+      "exclude_features": []
+    },
+    {
+      "name": "225_puma8NH",
+      "objective": "regression",
+      "exclude_features": []
+    },
+    { "name": "344_mv", "objective": "regression", "exclude_features": [] },
+    { "name": "503_wind", "objective": "regression", "exclude_features": [] },
+    { "name": "529_pollen", "objective": "regression", "exclude_features": [] },
+    { "name": "537_houses", "objective": "regression", "exclude_features": [] },
+    { "name": "564_fried", "objective": "regression", "exclude_features": [] },
+    {
+      "name": "574_house_16H",
+      "objective": "regression",
+      "exclude_features": []
+    },
+    {
+      "name": "588_fri_c4_1000_100",
+      "objective": "regression",
+      "exclude_features": []
+    },
+    { "name": "adult", "objective": "binary", "exclude_features": [] },
+    { "name": "banana", "objective": "binary", "exclude_features": [] },
+    { "name": "chess", "objective": "binary", "exclude_features": [] },
+    { "name": "churn", "objective": "binary", "exclude_features": [] },
+    {
+      "name": "clean2",
+      "objective": "binary",
+      "exclude_features": ["molecule_name", "conformation_name"]
+    },
+    { "name": "coil2000", "objective": "binary", "exclude_features": [] },
+    { "name": "dis", "objective": "binary", "exclude_features": [] },
     {
       "name": "GAMETES_Epistasis_2_Way_20atts_0.1H_EDM_1_1",
-      "objective": "binary"
+      "objective": "binary",
+      "exclude_features": []
     },
     {
       "name": "GAMETES_Heterogeneity_20atts_1600_Het_0.4_0.2_50_EDM_2_001",
-      "objective": "binary"
+      "objective": "binary",
+      "exclude_features": []
     },
-    { "name": "german", "objective": "binary" },
-    { "name": "Hill_Valley_with_noise", "objective": "binary" },
-    { "name": "hypothyroid", "objective": "binary" },
-    { "name": "magic", "objective": "binary" },
-    { "name": "mofn_3_7_10", "objective": "binary" },
-    { "name": "mushroom", "objective": "binary" },
-    { "name": "parity5+5", "objective": "binary" },
-    { "name": "phoneme", "objective": "binary" },
-    { "name": "ring", "objective": "binary" },
-    { "name": "spambase", "objective": "binary" },
-    { "name": "titanic", "objective": "binary" },
-    { "name": "twonorm", "objective": "binary" }
+    { "name": "german", "objective": "binary", "exclude_features": [] },
+    {
+      "name": "Hill_Valley_with_noise",
+      "objective": "binary",
+      "exclude_features": []
+    },
+    { "name": "hypothyroid", "objective": "binary", "exclude_features": [] },
+    { "name": "magic", "objective": "binary", "exclude_features": [] },
+    { "name": "mofn_3_7_10", "objective": "binary", "exclude_features": [] },
+    { "name": "mushroom", "objective": "binary", "exclude_features": [] },
+    { "name": "parity5+5", "objective": "binary", "exclude_features": [] },
+    { "name": "phoneme", "objective": "binary", "exclude_features": [] },
+    { "name": "ring", "objective": "binary", "exclude_features": [] },
+    { "name": "spambase", "objective": "binary", "exclude_features": [] },
+    { "name": "titanic", "objective": "binary", "exclude_features": [] },
+    { "name": "twonorm", "objective": "binary", "exclude_features": [] }
   ]
 }
