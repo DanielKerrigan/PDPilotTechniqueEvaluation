@@ -3,7 +3,7 @@
 #SBATCH --job-name=pdpilot-debug-all
 #SBATCH --output=/scratch/kerrigan.d/pdpilot/debug/output/%A_%a.out
 #SBATCH --error=/scratch/kerrigan.d/pdpilot/debug/output/%A_%a.err
-#SBATCH --array=0-19
+#SBATCH --array=0-17
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 
