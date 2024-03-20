@@ -17,8 +17,8 @@ def get_pdps(pdpilot_paths):
         pd_data = json.loads(pd_path.read_bytes())
         feature_info = pd_data["feature_info"]
         for i, owp in enumerate(pd_data["one_way_pds"]):
-            # don't include binary features or flat PDPs
-            if len(owp["x_values"]) > 2 and len(set(owp["mean_predictions"])) > 1:
+            # only ordered features and non-flat PDs
+            if owp["ordered"] and len(set(owp["mean_predictions"])) > 1:
                 pdp = {
                     "index": i,
                     "dataset": pd_path.stem,
