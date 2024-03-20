@@ -20,7 +20,7 @@ def get_pdps(pdpilot_paths):
             # only ordered features and non-flat PDs
             if owp["ordered"] and len(set(owp["mean_predictions"])) > 1:
                 pdp = {
-                    "index": i,
+                    "index": len(pdps),
                     "dataset": pd_path.stem,
                     "feature": owp["x_feature"],
                     "x": owp["x_values"],
