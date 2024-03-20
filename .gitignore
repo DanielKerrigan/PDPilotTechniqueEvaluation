@@ -4,6 +4,7 @@
 data/results
 filtering/*.json
 filtering/labeling/static/*.json
+scratch
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

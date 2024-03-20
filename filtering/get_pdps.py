@@ -16,10 +16,13 @@ def get_pdps(pdpilot_paths):
 
         pd_data = json.loads(pd_path.read_bytes())
         feature_info = pd_data["feature_info"]
-        for owp in pd_data["one_way_pds"]:
+        for i, owp in enumerate(pd_data["one_way_pds"]):
             # don't include binary features or flat PDPs
             if len(owp["x_values"]) > 2 and len(set(owp["mean_predictions"])) > 1:
                 pdp = {
+                    "index": i,
+                    "dataset": pd_path.stem,
+                    "feature": owp["x_feature"],
                     "x": owp["x_values"],
                     "y": owp["mean_predictions"],
                     "kind": feature_info[owp["x_feature"]]["kind"],
@@ -52,7 +55,7 @@ if __name__ == "__main__":
         "-d", "--debug", action="store_true", help="run on debug datasets"
     )
     parser.add_argument("-p", "--pdpilot", default=".", help="pdpilot data directory")
-    parser.add_argument("-o", "--output", default=".", help="output path")
+    parser.add_argument("-o", "--output", default="pdps.json", help="output path")
 
     args = parser.parse_args()
 

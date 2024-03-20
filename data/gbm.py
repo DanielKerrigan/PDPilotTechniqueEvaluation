@@ -8,7 +8,15 @@ from sklearn.model_selection import KFold, StratifiedKFold
 
 
 def train(
-    X, y, features, objective, splitter, early_stopping_rounds=10, seed=1, jobs=1
+    X,
+    y,
+    features,
+    nominal_features,
+    objective,
+    splitter,
+    early_stopping_rounds=10,
+    seed=1,
+    jobs=1,
 ):
     """Train a LightGBM model with parameters chosen by cross-validation."""
 
@@ -28,6 +36,7 @@ def train(
         params,
         train_set,
         feature_name=features,
+        categorical_feature=nominal_features,
         folds=splitter,
         num_boost_round=10000,
         callbacks=[lgb.early_stopping(early_stopping_rounds, verbose=False)],
@@ -47,6 +56,7 @@ def train(
         params=best_params,
         train_set=train_set,
         feature_name=features,
+        categorical_feature=nominal_features,
         num_boost_round=best_iteration,
     )
 
@@ -54,7 +64,15 @@ def train(
 
 
 def nested_cross_validation(
-    X, y, features, objective, outer_splitter, inner_splitter, seed=1, jobs=1
+    X,
+    y,
+    features,
+    nominal_features,
+    objective,
+    outer_splitter,
+    inner_splitter,
+    seed=1,
+    jobs=1,
 ):
     """Performs nested cross validation."""
 
@@ -71,6 +89,7 @@ def nested_cross_validation(
             X=X_train,
             y=y_train,
             features=features,
+            nominal_features=nominal_features,
             objective=objective,
             splitter=inner_splitter,
             seed=seed + i,
@@ -99,6 +118,7 @@ def nested_cross_validation_and_train(
     X,
     y,
     features,
+    nominal_features,
     objective,
     n_outer_splits=5,
     n_inner_splits=5,
@@ -118,6 +138,7 @@ def nested_cross_validation_and_train(
         X=X,
         y=y,
         features=features,
+        nominal_features=nominal_features,
         objective=objective,
         outer_splitter=outer_splitter,
         inner_splitter=inner_splitter,
@@ -129,6 +150,7 @@ def nested_cross_validation_and_train(
         X=X,
         y=y,
         features=features,
+        nominal_features=nominal_features,
         objective=objective,
         splitter=inner_splitter,
         seed=seed,

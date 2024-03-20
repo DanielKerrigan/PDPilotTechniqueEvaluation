@@ -10,8 +10,9 @@ dependencies:
   - nodejs
   - altair
   - matplotlib
-  - optuna
   - lightgbm
+  - optuna
+  - optuna-integration
   - pip
   - pip:
       - pmlb

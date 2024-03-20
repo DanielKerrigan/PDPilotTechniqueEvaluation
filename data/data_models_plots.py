@@ -8,8 +8,17 @@ import optuna
 from pmlb import fetch_data
 from gbm import nested_cross_validation_and_train
 from sklearn.metrics import mean_squared_error, log_loss
+from sklearn.model_selection import train_test_split
 import numpy as np
 from pdpilot import partial_dependence
+
+
+def sample(df, n, objective):
+    """Stratified sample for binary datasets, random for regression."""
+    if objective == "binary":
+        return train_test_split(df, train_size=n, random_state=1, stratify=[0, 1])[0]
+    else:
+        return df.sample(n, random_state=1)
 
 
 def get_time():
@@ -56,11 +65,12 @@ def load_dataset(dataset_group, index, datasets_dir):
     dataset = dataset_info["name"]
     objective = dataset_info["objective"]
     exclude_features = dataset_info["exclude_features"]
+    nominal_features = dataset_info["nominal_features"]
 
     df_all = fetch_data(dataset_info["name"], local_cache_dir=datasets_dir.as_posix())
 
     df_reduced = (
-        df_all if df_all.shape[0] <= 200_000 else df_all.sample(200_000, random_state=1)
+        df_all if df_all.shape[0] <= 200_000 else sample(df_all, 200_000, objective)
     )
 
     df_X = df_reduced.drop(columns=["target"] + exclude_features)
@@ -80,7 +90,7 @@ def load_dataset(dataset_group, index, datasets_dir):
 
     X = df_X.to_numpy()
 
-    return dataset, objective, df_X, X, y, features
+    return dataset, objective, df_X, X, y, features, nominal_features
 
 
 def main(dataset_group, index, output, jobs):
@@ -96,7 +106,7 @@ def main(dataset_group, index, output, jobs):
     # load the dataset
 
     print(f"\n{get_time()} Loading dataset")
-    dataset, objective, df_X, X, y, features = load_dataset(
+    dataset, objective, df_X, X, y, features, nominal_features = load_dataset(
         dataset_group, index, datasets_dir
     )
 
@@ -105,7 +115,7 @@ def main(dataset_group, index, output, jobs):
     print(f"\n{get_time()} Training the model on {dataset}")
 
     results, booster = nested_cross_validation_and_train(
-        X, y, features, objective, jobs=jobs
+        X, y, features, nominal_features, objective, jobs=jobs
     )
     booster.save_model(models_dir / f"{dataset}.txt")
 
@@ -120,24 +130,33 @@ def main(dataset_group, index, output, jobs):
         sep="\n",
     )
 
+    if results["mean_score"] >= baseline_score:
+        print("The model is not better than the baseline")
+        return
+
     # calculate PDP and ICE plots
 
     print(f"\n{get_time()} Calculating PDP and ICE plots")
 
     pd_path = pdpilot_dir / f"{dataset}.json"
 
-    df_pd = df_X if df_X.shape[0] <= 2000 else df_X.sample(2000, random_state=1)
+    df_pd = df_X if df_X.shape[0] <= 2000 else sample(df_X, 2000, objective)
 
     partial_dependence(
         df=df_pd,
         predict=booster.predict,
         features=features,
+        nominal_features=nominal_features,
         resolution=20,
         n_jobs=jobs,
         seed=1,
         output_path=pd_path.as_posix(),
         logging_level="WARNING",
     )
+
+    print(f"\n{get_time()} Finished calculating PDP and ICE plots")
+    print("Plots computed for the following instances:")
+    print(list(df_pd.index))
 
 
 if __name__ == "__main__":
