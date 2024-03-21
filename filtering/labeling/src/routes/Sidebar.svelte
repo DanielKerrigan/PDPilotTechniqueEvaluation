@@ -7,6 +7,7 @@
 	export let curves: Curve[];
 	export let index: number;
 	export let color: ScaleOrdinal<Shape, string>;
+	export let aspectRatio: number;
 	export let setIndex: (i: number) => void;
 
 	let div: HTMLDivElement;
@@ -26,7 +27,14 @@
 		{#each curves as curve, i}
 			<button class="row" class:highlight={i === index} on:click={() => setIndex(i)}>
 				<div class="index">{i + 1}</div>
-				<Path {curve} {color} strokeWidth={1.5} circleRadius={1.5} width={48} height={24} />
+				<Path
+					{curve}
+					{color}
+					strokeWidth={1.5}
+					circleRadius={1.5}
+					width={24 * aspectRatio}
+					height={24}
+				/>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -56,6 +64,23 @@
 						/>
 					{/if}
 				</svg>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke={color(curve.shape)}
+					style:width="24px"
+					style:height="24px"
+				>
+					{#if curve.unclear}
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
+						/>
+					{/if}
+				</svg>
 			</button>
 		{/each}
 	</div>
@@ -73,6 +98,9 @@
 
 	.row {
 		padding: 0.25em;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 	}
 
 	.row:hover {
@@ -81,12 +109,6 @@
 
 	.highlight {
 		background-color: var(--gray-1);
-	}
-
-	.row {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
 	}
 
 	.index {

@@ -63,6 +63,21 @@ h6 {
 	isolation: isolate;
 }
 
+/* Additions */
+
+:root {
+	--gray-0: rgb(247, 247, 247);
+	--gray-1: rgb(226, 226, 226);
+	--gray-2: rgb(198, 198, 198);
+	--gray-3: rgb(171, 171, 171);
+	--gray-4: rgb(145, 145, 145);
+	--gray-5: rgb(119, 119, 119);
+	--gray-6: rgb(94, 94, 94);
+	--gray-7: rgb(71, 71, 71);
+	--gray-8: rgb(48, 48, 48);
+	--gray-9: rgb(27, 27, 27);
+}
+
 button {
 	color: black;
 	background-color: white;

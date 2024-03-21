@@ -14,6 +14,8 @@
 		.domain(['decreasing', 'mixed', 'increasing', ''])
 		.range(['#d95f02', '#7570b3', '#1b9e77', '#666666']);
 
+	const aspectRatio = 1.95;
+
 	function setIndex(i: number) {
 		if (i >= 0 && i < curves.length) {
 			index = i;
@@ -23,16 +25,23 @@
 	function setShape(event: CustomEvent<Shape>) {
 		curves[index].shape = event.detail;
 	}
+
+	function setUnclear(event: CustomEvent<boolean>) {
+		console.log('setUnclear');
+		curves[index].unclear = event.detail;
+	}
 </script>
 
 <div class="app">
-	<Sidebar {curves} {index} {setIndex} {color} />
+	<Sidebar {curves} {index} {setIndex} {color} {aspectRatio} />
 	<Main
 		curve={curves[index]}
 		{color}
+		{aspectRatio}
 		next={() => setIndex(index + 1)}
 		previous={() => setIndex(index - 1)}
 		on:setShape={setShape}
+		on:setUnclear={setUnclear}
 	/>
 </div>
 
@@ -45,19 +54,5 @@
 		font-size: 16px;
 
 		display: flex;
-
-		--blue: rgb(0, 95, 204);
-		--dark-blue: rgb(1, 51, 104);
-
-		--gray-0: rgb(247, 247, 247);
-		--gray-1: rgb(226, 226, 226);
-		--gray-2: rgb(198, 198, 198);
-		--gray-3: rgb(171, 171, 171);
-		--gray-4: rgb(145, 145, 145);
-		--gray-5: rgb(119, 119, 119);
-		--gray-6: rgb(94, 94, 94);
-		--gray-7: rgb(71, 71, 71);
-		--gray-8: rgb(48, 48, 48);
-		--gray-9: rgb(27, 27, 27);
 	}
 </style>

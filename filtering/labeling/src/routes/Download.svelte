@@ -11,6 +11,8 @@
 
 	export let curves: Curve[];
 
+	$: disabled = curves.filter((d) => d.shape === '').length !== 0;
+
 	let download: HTMLAnchorElement;
 
 	function onclick() {
@@ -24,7 +26,7 @@
 	}
 </script>
 
-<button on:click={onclick}>Download</button>
+<button on:click={onclick} {disabled}>Download</button>
 
 <a href="." download={PUBLIC_OUTPUT_FILE} bind:this={download}>Download</a>
 
@@ -35,5 +37,14 @@
 
 	button {
 		height: 2em;
+		color: white;
+		background-color: black;
+		border: 1px solid black;
+	}
+
+	button:disabled {
+		cursor: not-allowed;
+		background-color: var(--gray-3);
+		border-color: var(--gray-3);
 	}
 </style>

@@ -8,6 +8,8 @@ export async function load({ fetch }) {
 		y: number[];
 		kind: 'quantitative' | 'categorical';
 	}[];
-	const curves = json.map(({ x, y, kind }) => ({ x, y, kind, shape: '' as const }) as Curve);
+	const curves = json.map(
+		({ x, y, kind }) => ({ x, y, kind, shape: '' as const, unclear: false }) as Curve
+	);
 	return { curves };
 }

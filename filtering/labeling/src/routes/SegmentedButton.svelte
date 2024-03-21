@@ -8,7 +8,14 @@
 
 	const dispatch = createEventDispatcher<{ setShape: Shape }>();
 
-	const segments: Shape[] = ['decreasing', 'mixed', 'increasing'];
+	const segments: { value: Shape; label: string }[] = [
+		{
+			value: 'decreasing',
+			label: 'Decreasing'
+		},
+		{ value: 'mixed', label: 'Mixed' },
+		{ value: 'increasing', label: 'Increasing' }
+	];
 
 	function onChangeValue(value: Shape) {
 		dispatch('setShape', value);
@@ -16,7 +23,7 @@
 
 	function onkeydown(ev: KeyboardEvent) {
 		if (ev.key === '1' || ev.key === '2' || ev.key === '3') {
-			dispatch('setShape', segments[+ev.key - 1]);
+			dispatch('setShape', segments[+ev.key - 1].value);
 		}
 	}
 </script>
@@ -25,12 +32,12 @@
 
 <div class="segmented-control-container">
 	<div class="segmented-control-buttons-row">
-		{#each segments as value}
+		{#each segments as { value, label }}
 			<button
 				class:selected-segment={value === selectedValue}
 				on:click={() => onChangeValue(value)}
 				style:color={value === selectedValue ? 'white' : 'black'}
-				style:background={value === selectedValue ? color(value) : 'white'}>{value}</button
+				style:background={value === selectedValue ? color(value) : 'white'}>{label}</button
 			>
 		{/each}
 	</div>

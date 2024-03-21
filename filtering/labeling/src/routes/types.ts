@@ -5,4 +5,5 @@ export type Curve = {
 	y: number[];
 	kind: 'quantitative' | 'categorical';
 	shape: Shape;
+	unclear: boolean;
 };
