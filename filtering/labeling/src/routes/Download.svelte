@@ -6,7 +6,7 @@
 -->
 
 <script lang="ts">
-	import type { Curve } from './types';
+	import type { Curve } from '$lib/types';
 	import { PUBLIC_OUTPUT_FILE } from '$env/static/public';
 
 	export let curves: Curve[];

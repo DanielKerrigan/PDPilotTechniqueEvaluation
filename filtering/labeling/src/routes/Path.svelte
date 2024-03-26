@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ScaleOrdinal } from 'd3-scale';
-	import type { Curve, Shape } from './types';
+	import type { Curve, Shape } from '$lib/types';
 	import { scaleLinear, scalePoint } from 'd3-scale';
 	import { range } from 'd3-array';
 	import { line } from 'd3-shape';

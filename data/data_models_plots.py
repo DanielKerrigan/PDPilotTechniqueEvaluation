@@ -94,7 +94,7 @@ def load_dataset(dataset_group, index, datasets_dir):
 
 
 def main(dataset_group, index, output, jobs):
-    """Download the dataset, train the model, and calculate the PDP and  ICE plots."""
+    """Download the dataset, train the model, and calculate the PDP and ICE plots."""
 
     print(f"{get_time()} {dataset_group=} {index=} {output=} {jobs=}")
 

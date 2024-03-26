@@ -128,11 +128,11 @@ def nested_cross_validation_and_train(
     """Perform nested cross-validation and then train the model on the whole dataset."""
 
     if objective == "binary":
-        outer_splitter = StratifiedKFold(n_splits=n_outer_splits)
-        inner_splitter = StratifiedKFold(n_splits=n_inner_splits)
+        outer_splitter = StratifiedKFold(n_splits=n_outer_splits, random_state=seed)
+        inner_splitter = StratifiedKFold(n_splits=n_inner_splits, random_state=seed)
     elif objective == "regression":
-        outer_splitter = KFold(n_splits=n_outer_splits)
-        inner_splitter = KFold(n_splits=n_inner_splits)
+        outer_splitter = KFold(n_splits=n_outer_splits, random_state=seed)
+        inner_splitter = KFold(n_splits=n_inner_splits, random_state=seed)
 
     results = nested_cross_validation(
         X=X,

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ScaleOrdinal } from 'd3-scale';
-	import type { Curve, Shape } from './types';
+	import type { Curve, Shape } from '$lib/types';
 	import Path from './Path.svelte';
 	import SegmentedButton from './SegmentedButton.svelte';
 	import { createEventDispatcher } from 'svelte';

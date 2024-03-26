@@ -16,4 +16,4 @@ dependencies:
   - pip
   - pip:
       - pmlb
-      - pdpilot==0.5.4
+      - pdpilot==0.5.5

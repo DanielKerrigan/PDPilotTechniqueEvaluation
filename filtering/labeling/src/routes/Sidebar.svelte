@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { ScaleOrdinal } from 'd3-scale';
 	import Path from './Path.svelte';
-	import type { Curve, Shape } from './types';
+	import type { Curve, Shape } from '$lib/types';
 	import Download from './Download.svelte';
 
 	export let curves: Curve[];

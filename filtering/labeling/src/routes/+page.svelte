@@ -2,7 +2,7 @@
 	import './style.css';
 	import Sidebar from './Sidebar.svelte';
 	import Main from './Main.svelte';
-	import type { Curve, Shape } from './types';
+	import type { Curve, Shape } from '$lib/types';
 	import { scaleOrdinal } from 'd3-scale';
 
 	export let data: { curves: Curve[] };
@@ -27,7 +27,6 @@
 	}
 
 	function setUnclear(event: CustomEvent<boolean>) {
-		console.log('setUnclear');
 		curves[index].unclear = event.detail;
 	}
 </script>

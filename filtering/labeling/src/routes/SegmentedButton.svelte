@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ScaleOrdinal } from 'd3-scale';
-	import type { Shape } from './types';
+	import type { Shape } from '$lib/types';
 	import { createEventDispatcher } from 'svelte';
 
 	export let selectedValue: string;

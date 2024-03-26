@@ -12,8 +12,16 @@ def read_json(path):
     return json.loads(Path(path).read_bytes())
 
 
+def add_indices(curves):
+    """add index key to dicts in the list"""
+    for i, curve in enumerate(curves):
+        curve["index"] = i
+
+    return curves
+
+
 def get_shape(curve, t):
-    """Get the shape of the curve for the given threshold."""
+    """Get the shape of the curve for the given threshold. Copied from PDPilot."""
 
     y = np.array(curve["y"])
     diff = np.diff(y)
@@ -46,7 +54,9 @@ def calculate_accuracy(labels_a, labels_b):
 
 
 def get_scores(curves):
-    """Find the threshold in the range [0, 0.5) that gives the best accuracy."""
+    """For each threshold in the range [0, 0.5] in increments of 0.005,
+    calculate the heuristic's labels for the curves and the accuracy between
+    those labels and the user's labels."""
 
     user_labels = [curve["shape"] for curve in curves]
 
@@ -66,8 +76,9 @@ def get_scores(curves):
 
 
 def plot_accuracy_vs_threshold(df):
-    """Plot line chart."""
+    """Plot line chart that compares accuracy of users's labels and the threshold."""
 
+    # get max accuracy
     best = df.iloc[df["accuracy"].idxmax()]
     title = f"Best t = {best['threshold']} ({best['accuracy']:.2%})"
 
@@ -85,9 +96,9 @@ def plot_accuracy_vs_threshold(df):
 
 
 def check_labels(curves, heuristic_labels):
-    """if there are cases where the user labeled it increasing and the
-    heurisitc labels it decreasing, then it is likely
-    due to a mistake when labeling."""
+    """Check if there are cases where the user labeled it increasing and the
+    heurisitc labels it decreasing (or vice versa). If there are, then they are
+    likely due to a mistake when labeling that should be corrected."""
 
     user_labels = [curve["shape"] for curve in curves]
 
@@ -99,7 +110,6 @@ def check_labels(curves, heuristic_labels):
         if (heuristic_label == "increasing" and user_label == "decreasing") or (
             heuristic_label == "decreasing" and user_label == "increasing"
         ):
-            # if this is true, it's likely because of a mistake when labeling
             bad.append(
                 {
                     "index": i,
@@ -112,7 +122,7 @@ def check_labels(curves, heuristic_labels):
 
 
 def fix_labels(curves, bad_labels):
-    """Correct labeling mistakes."""
+    """Correct labeling mistakes that were identified by check_labels."""
     for bl in bad_labels:
         curves[bl["index"]]["shape"] = bl["heuristic_label"]
 
@@ -135,7 +145,10 @@ def plot_disagreements(curves, shapes_a, shapes_b, title_a, title_b):
             )
 
             plot = (
-                alt.Chart(df_plot, title=f"{title_a} = {a}, {title_b} = {b}")
+                alt.Chart(
+                    df_plot,
+                    title=f"{curve['index']}: {title_a} = {a}, {title_b} = {b}",
+                )
                 .mark_line()
                 .encode(x="x", y=alt.Y("y").scale(zero=False))
                 .properties(width=width, height=height)
@@ -146,8 +159,21 @@ def plot_disagreements(curves, shapes_a, shapes_b, title_a, title_b):
     return alt.hconcat(*disagree_plots)
 
 
+def set_consensus_labels(curves_consensus, labels_a, labels_b, corrections):
+    """modify curves_consensus based on the provided list of corrections."""
+
+    correction_index = 0
+
+    for curve, a, b in zip(curves_consensus, labels_a, labels_b):
+        if a != b:
+            i, new_label = corrections[correction_index]
+            assert i == curve["index"]
+            curve["shape"] = new_label
+            correction_index += 1
+
+
 def plot_label_counts(labels_a, labels_b):
-    """Plot number of times labels used for each user."""
+    """Plot number of times each shape was picked for both sets of labels."""
 
     df_labels = pd.DataFrame(
         {
