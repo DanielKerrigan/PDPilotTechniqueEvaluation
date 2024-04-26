@@ -5,6 +5,7 @@
 
 	export let selectedValue: string;
 	export let color: ScaleOrdinal<Shape, string>;
+	export let enableNumberKeys = false;
 
 	const dispatch = createEventDispatcher<{ setShape: Shape }>();
 
@@ -22,6 +23,10 @@
 	}
 
 	function onkeydown(ev: KeyboardEvent) {
+		if (!enableNumberKeys) {
+			return;
+		}
+
 		if (ev.key === '1' || ev.key === '2' || ev.key === '3') {
 			dispatch('setShape', segments[+ev.key - 1].value);
 		}

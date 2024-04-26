@@ -1,5 +1,4 @@
 <script lang="ts">
-	import './style.css';
 	import Sidebar from './Sidebar.svelte';
 	import Main from './Main.svelte';
 	import type { Curve, Shape } from '$lib/types';
@@ -34,7 +33,7 @@
 	}
 </script>
 
-<div class="app">
+<div>
 	{#if curves.length > 0}
 		<Sidebar {curves} {index} {setIndex} {color} {aspectRatio} />
 		<Main
@@ -52,13 +51,9 @@
 </div>
 
 <style>
-	.app {
-		width: 100vw;
-		height: 100vh;
-
-		font-family: system-ui, sans-serif;
-		font-size: 16px;
-
+	div {
+		width: 100%;
+		height: 100%;
 		display: flex;
 	}
 </style>

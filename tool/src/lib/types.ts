@@ -44,4 +44,5 @@ export type Feature = {
 		method: Method;
 		score: number;
 	}[];
+	comment: string;
 };

@@ -4,6 +4,7 @@
 data/results
 scratch
 clustering/results
+filtering/results
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

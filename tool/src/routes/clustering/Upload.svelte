@@ -23,13 +23,14 @@
 				return;
 			}
 			const text = event.target.result as string;
-			const json = JSON.parse(text) as Omit<Feature, 'scores'>[];
+			const json = JSON.parse(text) as Omit<Feature, 'scores' | 'comment'>[];
 
 			const features: Feature[] = json.map((d) => {
 				const order = shuffle(Object.keys(d.clusters) as Method[]);
 				return {
 					...d,
-					scores: order.map((method) => ({ method, score: -1 }))
+					scores: order.map((method) => ({ method, score: -1 })),
+					comment: ''
 				};
 			});
 
@@ -55,7 +56,7 @@
 			style="display:none"
 			on:change={onchange}
 		/>
-		<button on:click={onclick} class="small">Upload Data</button>
+		<button on:click={onclick} class="small">Upload Clustering Data</button>
 	</div>
 </div>
 

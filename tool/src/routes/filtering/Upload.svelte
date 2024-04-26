@@ -51,7 +51,7 @@
 			style="display:none"
 			on:change={onchange}
 		/>
-		<button on:click={onclick} class="small">Upload Data</button>
+		<button on:click={onclick} class="small">Upload Filtering Data</button>
 	</div>
 </div>
 

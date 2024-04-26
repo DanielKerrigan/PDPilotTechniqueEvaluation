@@ -36,7 +36,7 @@ def get_pdps(pdpilot_paths):
 def main(dataset_group, input_dir, output):
     """Main method for script."""
 
-    input_path = Path(input_dir).resolve()
+    input_path = Path(input_dir).resolve() / dataset_group / "pdpilot"
     output_path = Path(output).resolve()
 
     datasets = json.loads(Path("../data/datasets.json").read_bytes())
@@ -55,11 +55,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "-d", "--debug", action="store_true", help="run on debug datasets"
     )
-    parser.add_argument("-p", "--pdpilot", default=".", help="pdpilot data directory")
+    parser.add_argument(
+        "-i", "--input", default="./results", help="input results directory"
+    )
     parser.add_argument("-o", "--output", default="pdps.json", help="output path")
 
     args = parser.parse_args()
 
     DATASET_GROUP = "debug" if args.debug else "actual"
 
-    main(DATASET_GROUP, args.pdpilot, args.output)
+    main(DATASET_GROUP, args.input, args.output)

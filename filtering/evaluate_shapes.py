@@ -37,12 +37,10 @@ def get_shape(curve, t):
         return "mixed"
 
 
-def calculate_accuracy(labels_a, labels_b):
+def calculate_num_correct(labels_a, labels_b):
     """Get accuracy between two sets of labels"""
 
-    num_curves = len(labels_a)
-
-    assert num_curves == len(labels_b)
+    assert len(labels_a) == len(labels_b)
 
     correct = 0
 
@@ -50,7 +48,7 @@ def calculate_accuracy(labels_a, labels_b):
         if a == b:
             correct += 1
 
-    return correct / num_curves
+    return correct
 
 
 def get_scores(curves):
@@ -60,18 +58,27 @@ def get_scores(curves):
 
     user_labels = [curve["shape"] for curve in curves]
 
+    num_curves = len(curves)
+
     thresholds = np.linspace(0, 0.5, 101)
     accuracies = []
+    correct = []
     labels = []
 
     for t in thresholds:
         heuristic_labels = [get_shape(curve, t) for curve in curves]
-        accuracy = calculate_accuracy(user_labels, heuristic_labels)
-        accuracies.append(accuracy)
+        num_correct = calculate_num_correct(user_labels, heuristic_labels)
+        correct.append(num_correct)
+        accuracies.append(num_correct / num_curves)
         labels.append(heuristic_labels)
 
     return pd.DataFrame(
-        {"threshold": thresholds, "accuracy": accuracies, "labels": labels}
+        {
+            "threshold": thresholds,
+            "accuracy": accuracies,
+            "correct": correct,
+            "labels": labels,
+        }
     )
 
 
@@ -79,11 +86,9 @@ def plot_accuracy_vs_threshold(df):
     """Plot line chart that compares accuracy of users's labels and the threshold."""
 
     # get max accuracy
-    best = df.iloc[df["accuracy"].idxmax()]
-    title = f"Best t = {best['threshold']} ({best['accuracy']:.2%})"
 
     plot = (
-        alt.Chart(df, title=title)
+        alt.Chart(df)
         .mark_line()
         .encode(
             x=alt.X("threshold").title("t"),
@@ -92,7 +97,12 @@ def plot_accuracy_vs_threshold(df):
         .properties(width=400)
     )
 
-    return plot, best
+    return plot
+
+
+def get_best_thresholds(df):
+    """Get the rows of df that correspond to the highest scores."""
+    return df[df["correct"] == df["correct"].max()]
 
 
 def check_labels(curves, heuristic_labels):
@@ -192,3 +202,10 @@ def plot_label_counts(labels_a, labels_b):
             color="user",
         )
     )
+
+
+def check_same_curves(curves_a, curves_b):
+    """Check that the curves are the same."""
+    for a, b in zip(curves_a, curves_b):
+        assert a["x"] == b["x"]
+        assert a["y"] == b["y"]

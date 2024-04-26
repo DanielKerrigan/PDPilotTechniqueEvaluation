@@ -73,11 +73,15 @@
 	<div class="ratings">
 		{#each feature.scores as { score }, i}
 			<SegmentedButton
-				labels={['1', '2', '3', '4', '5']}
+				labels={['1 - Very Poor', '2 - Poor', '3 - Acceptable', '4 - Good', '5 - Very Good']}
 				selectedIndex={score - 1}
 				on:setSelectedIndex={({ detail }) => onChangeScore(i, detail + 1)}
 			/>
 		{/each}
+	</div>
+
+	<div class="comment">
+		<textarea rows="3" cols="50" bind:value={feature.comment} />
 	</div>
 </div>
 
@@ -113,5 +117,15 @@
 		flex: none;
 		display: flex;
 		justify-content: center;
+	}
+
+	.comment {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	textarea {
+		resize: none;
 	}
 </style>

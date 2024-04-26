@@ -35,8 +35,8 @@
 	button {
 		height: 2em;
 		color: white;
-		background-color: black;
-		border: 1px solid black;
+		background-color: var(--gray-7);
+		border: 1px solid var(--gray-7);
 	}
 
 	button:disabled {

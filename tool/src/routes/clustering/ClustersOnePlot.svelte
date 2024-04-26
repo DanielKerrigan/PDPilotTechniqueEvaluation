@@ -8,6 +8,7 @@
 	import { categoricalColors, scaleCanvas } from '$lib/vis-utils';
 	import { onMount } from 'svelte';
 	import { centerIceLines } from '$lib/utils';
+	import { ascending } from 'd3-array';
 
 	export let feature: Feature;
 	export let method: Method;
@@ -27,7 +28,7 @@
 	$: height = borderBoxSize ? borderBoxSize[0].blockSize : 100;
 
 	$: clusters = feature.clusters[method];
-	$: clusterIds = clusters.map((d) => d.aligned_id);
+	$: clusterIds = clusters.map((d) => d.aligned_id).sort(ascending);
 
 	$: x =
 		feature.kind === 'quantitative'

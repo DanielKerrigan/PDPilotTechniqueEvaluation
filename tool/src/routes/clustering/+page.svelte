@@ -1,5 +1,4 @@
 <script lang="ts">
-	import './style.css';
 	import Sidebar from './Sidebar.svelte';
 	import Main from './Main.svelte';
 	import Upload from './Upload.svelte';
@@ -24,7 +23,7 @@
 	}
 </script>
 
-<div class="app">
+<div>
 	{#if features.length > 0}
 		<Sidebar {features} {index} {setFeatureIndex} />
 		<Main
@@ -39,12 +38,9 @@
 </div>
 
 <style>
-	.app {
-		width: 100vw;
-		height: 100vh;
-
-		font-family: system-ui, sans-serif;
-		font-size: 16px;
+	div {
+		width: 100%;
+		height: 100%;
 
 		display: flex;
 	}

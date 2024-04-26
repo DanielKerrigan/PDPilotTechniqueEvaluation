@@ -13,7 +13,9 @@ dependencies:
   - lightgbm
   - optuna
   - optuna-integration
+  - shap
   - pip
   - pip:
       - pmlb
       - pdpilot==0.5.5
+      - vega_datasets

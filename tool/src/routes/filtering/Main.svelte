@@ -57,7 +57,7 @@
 		</label>
 	</div>
 	<div class="choice">
-		<SegmentedButton selectedValue={curve.shape} {color} on:setShape />
+		<SegmentedButton selectedValue={curve.shape} {color} enableNumberKeys={true} on:setShape />
 	</div>
 </div>
 

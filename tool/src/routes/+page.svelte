@@ -1,7 +1,7 @@
 <script lang="ts">
 </script>
 
-<div class="app">
+<div>
 	<ul>
 		<li>
 			<a href="/filtering">Filtering</a>
@@ -13,15 +13,13 @@
 </div>
 
 <style>
-	.app {
-		width: 100vw;
-		height: 100vh;
+	div {
+		width: 100%;
+		height: 100%;
 
-		font-family: system-ui, sans-serif;
 		font-size: 32px;
 
 		display: flex;
-
 		align-items: center;
 		justify-content: center;
 	}

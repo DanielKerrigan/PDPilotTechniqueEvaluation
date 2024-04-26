@@ -4,9 +4,12 @@ import argparse
 from datetime import datetime
 from pathlib import Path
 import json
+
+from gbm import nested_cross_validation_and_train
+from feature_importance import get_feature_importance
+
 import optuna
 from pmlb import fetch_data
-from gbm import nested_cross_validation_and_train
 from sklearn.metrics import mean_squared_error, log_loss
 from sklearn.model_selection import train_test_split
 import numpy as np
@@ -40,7 +43,7 @@ def get_baseline_score(y_true, objective):
         return mean_squared_error(y_true, y_pred)
 
 
-def create_dirs(output):
+def create_dirs(output, dataset):
     "Create directories to write output files to."
 
     output_dir = Path(output).resolve()
@@ -50,18 +53,26 @@ def create_dirs(output):
 
     models_dir = output_dir / "models"
     models_dir.mkdir(exist_ok=True)
+    model_path = models_dir / f"{dataset}.txt"
 
     pdpilot_dir = output_dir / "pdpilot"
     pdpilot_dir.mkdir(exist_ok=True)
+    pdpilot_path = pdpilot_dir / f"{dataset}.json"
 
-    return datasets_dir, models_dir, pdpilot_dir
+    importances_dir = output_dir / "importances"
+    importances_dir.mkdir(exist_ok=True)
+    importances_path = importances_dir / f"{dataset}.json"
+
+    stuff_dir = output_dir / "stuff"
+    stuff_dir.mkdir(exist_ok=True)
+    stuff_path = stuff_dir / f"{dataset}.json"
+
+    return datasets_dir, model_path, pdpilot_path, importances_path, stuff_path
 
 
-def load_dataset(dataset_group, index, datasets_dir):
+def load_dataset(dataset_info, datasets_dir):
     "Download the dataset."
 
-    datasets = json.loads(Path("datasets.json").read_bytes())
-    dataset_info = datasets[dataset_group][index]
     dataset = dataset_info["name"]
     objective = dataset_info["objective"]
     exclude_features = dataset_info["exclude_features"]
@@ -96,18 +107,24 @@ def load_dataset(dataset_group, index, datasets_dir):
 def main(dataset_group, index, output, jobs):
     """Download the dataset, train the model, and calculate the PDP and ICE plots."""
 
-    print(f"{get_time()} {dataset_group=} {index=} {output=} {jobs=}")
+    datasets = json.loads(Path("datasets.json").read_bytes())
+    dataset_info = datasets[dataset_group][index]
+    dataset = dataset_info["name"]
+
+    print(f"{get_time()} {dataset=} {output=} {jobs=}")
 
     # make output directories
 
-    print(f"\n{get_time()} Making output directories")
-    datasets_dir, models_dir, pdpilot_dir = create_dirs(output)
+    print(f"\n{get_time()} Making output paths and directories")
+    datasets_dir, model_path, pdpilot_path, importances_path, stuff_path = create_dirs(
+        output, dataset
+    )
 
     # load the dataset
 
     print(f"\n{get_time()} Loading dataset")
     dataset, objective, df_X, X, y, features, nominal_features = load_dataset(
-        dataset_group, index, datasets_dir
+        dataset_info, datasets_dir
     )
 
     # train the model
@@ -117,7 +134,7 @@ def main(dataset_group, index, output, jobs):
     results, booster = nested_cross_validation_and_train(
         X, y, features, nominal_features, objective, jobs=jobs
     )
-    booster.save_model(models_dir / f"{dataset}.txt")
+    booster.save_model(model_path)
 
     baseline_score = get_baseline_score(y, objective)
 
@@ -138,8 +155,6 @@ def main(dataset_group, index, output, jobs):
 
     print(f"\n{get_time()} Calculating PDP and ICE plots")
 
-    pd_path = pdpilot_dir / f"{dataset}.json"
-
     df_pd = df_X if df_X.shape[0] <= 2000 else sample(df_X, 2000, objective)
 
     partial_dependence(
@@ -150,13 +165,23 @@ def main(dataset_group, index, output, jobs):
         resolution=20,
         n_jobs=jobs,
         seed=1,
-        output_path=pd_path.as_posix(),
+        output_path=pdpilot_path.as_posix(),
         logging_level="WARNING",
     )
 
-    print(f"\n{get_time()} Finished calculating PDP and ICE plots")
-    print("Plots computed for the following instances:")
-    print(list(df_pd.index))
+    # calculate feature importances
+
+    print(f"\n{get_time()} Calculating feature importances")
+
+    df_importance = get_feature_importance(booster, df_X, df_pd, pdpilot_path)
+    df_importance.to_csv(importances_path, index=False)
+
+    # save indices used to compute PDP and ICE plots
+
+    print(f"\n{get_time()} Saving additional info")
+
+    stuff = {"pdpilot_indices": df_pd.index.to_list()}
+    stuff_path.write_text(json.dumps(stuff), encoding="UTF-8")
 
 
 if __name__ == "__main__":
