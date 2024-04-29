@@ -5,6 +5,16 @@ import pandas as pd
 import lightgbm as lgb
 from optuna.integration.lightgbm import LightGBMTunerCV
 from sklearn.model_selection import KFold, StratifiedKFold
+from sklearn.metrics import mean_squared_error, log_loss
+
+
+def score(y_true, y_pred, objective):
+    """Score the predictions."""
+
+    if objective == "binary":
+        return log_loss(y_true, y_pred)
+    else:
+        return mean_squared_error(y_true, y_pred)
 
 
 def train(
@@ -98,9 +108,7 @@ def nested_cross_validation(
 
         y_pred = booster.predict(X_eval)
 
-        score = np.sqrt(np.mean((y_pred - y_eval) ** 2))
-
-        scores.append(score)
+        scores.append(score(y_eval, y_pred, objective))
         params.append(booster.params)
         folds.append(i + 1)
 

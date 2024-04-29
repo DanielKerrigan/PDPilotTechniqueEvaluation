@@ -155,7 +155,13 @@ def main(dataset_group, index, output, jobs):
 
     print(f"\n{get_time()} Calculating PDP and ICE plots")
 
-    df_pd = df_X if df_X.shape[0] <= 2000 else sample(df_X, 2000, objective)
+    df_Xy = df_X.copy()
+    df_Xy["target"] = y
+
+    df_Xy_sample = df_Xy if df_Xy.shape[0] <= 2000 else sample(df_Xy, 2000, objective)
+
+    df_pd = df_Xy_sample.drop(columns=["target"])
+    y_pd = df_Xy_sample["target"].to_numpy()
 
     partial_dependence(
         df=df_pd,
@@ -173,7 +179,9 @@ def main(dataset_group, index, output, jobs):
 
     print(f"\n{get_time()} Calculating feature importances")
 
-    df_importance = get_feature_importance(booster, df_X, df_pd, pdpilot_path)
+    df_importance = get_feature_importance(
+        booster, df_pd, y_pd, pdpilot_path, objective
+    )
     df_importance.to_csv(importances_path, index=False)
 
     # save indices used to compute PDP and ICE plots
