@@ -19,7 +19,9 @@ from pdpilot import partial_dependence
 def sample(df, n, objective):
     """Stratified sample for binary datasets, random for regression."""
     if objective == "binary":
-        return train_test_split(df, train_size=n, random_state=1, stratify=[0, 1])[0]
+        return train_test_split(
+            df, df["target"], train_size=n, random_state=1, stratify=[0, 1]
+        )[0]
     else:
         return df.sample(n, random_state=1)
 
@@ -61,7 +63,7 @@ def create_dirs(output, dataset):
 
     importances_dir = output_dir / "importances"
     importances_dir.mkdir(exist_ok=True)
-    importances_path = importances_dir / f"{dataset}.json"
+    importances_path = importances_dir / f"{dataset}.csv"
 
     stuff_dir = output_dir / "stuff"
     stuff_dir.mkdir(exist_ok=True)
@@ -188,7 +190,8 @@ def main(dataset_group, index, output, jobs):
 
     print(f"\n{get_time()} Saving additional info")
 
-    stuff = {"pdpilot_indices": df_pd.index.to_list()}
+    results["scores"] = results["scores"].to_json(orient="records")
+    stuff = {"pdpilot_indices": df_pd.index.to_list(), "cv_results": results}
     stuff_path.write_text(json.dumps(stuff), encoding="UTF-8")
 
 
