@@ -20,7 +20,7 @@ def sample(df, n, objective):
     """Stratified sample for binary datasets, random for regression."""
     if objective == "binary":
         return train_test_split(
-            df, df["target"], train_size=n, random_state=1, stratify=[0, 1]
+            df, train_size=n, random_state=1, stratify=df["target"]
         )[0]
     else:
         return df.sample(n, random_state=1)
@@ -78,7 +78,6 @@ def load_dataset(dataset_info, datasets_dir):
     dataset = dataset_info["name"]
     objective = dataset_info["objective"]
     exclude_features = dataset_info["exclude_features"]
-    nominal_features = dataset_info["nominal_features"]
 
     df_all = fetch_data(dataset_info["name"], local_cache_dir=datasets_dir.as_posix())
 
@@ -94,6 +93,7 @@ def load_dataset(dataset_info, datasets_dir):
     df_X.drop(columns=nunique[nunique == 1].index, inplace=True)
 
     features = list(df_X.columns)
+    nominal_features = [f for f in dataset_info["nominal_features"] if f in features]
 
     # convert float columns that contain only integers to integers
     for feature in features:
