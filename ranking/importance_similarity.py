@@ -1,6 +1,7 @@
 """Compare feature importance scores."""
 
 import argparse
+import json
 from pathlib import Path
 from itertools import combinations
 
@@ -8,7 +9,13 @@ import pandas as pd
 from scipy import stats
 
 
-def compare_scores(input_paths):
+def get_dataset_to_type(dataset_path):
+    """get dictionary from name of dataset to whether it is synthetic or real"""
+    datasets = json.loads(Path(dataset_path).read_bytes())
+    return {ds["name"]: ds["type"] for group in datasets.values() for ds in group}
+
+
+def compare_scores(input_paths, dataset_to_type):
     """Compute how similar the rankings are between the
     difference feature importance methods for each dataset."""
 
@@ -17,7 +24,7 @@ def compare_scores(input_paths):
     clean_names = {
         "score_ice": "ICE",
         "score_pdp": "PDP",
-        "score_lgb": "LGB",
+        "score_lgb": "GBM",
         "score_shap": "SHAP",
         "score_perm": "PERM",
     }
@@ -34,13 +41,16 @@ def compare_scores(input_paths):
 
         for a, b in combos:
             kendall_tau = stats.kendalltau(df_scores[a], df_scores[b])
+            weighted_kendall_tau = stats.weightedtau(df_scores[a], df_scores[b])
 
             info = {
                 "dataset": dataset,
+                "type": dataset_to_type[dataset],
                 "combo": f"{clean_names[a]} vs. {clean_names[b]}",
                 "first_method": clean_names[a],
                 "second_method": clean_names[b],
                 "kendall_tau": kendall_tau.statistic,
+                "weighted_kendall_tau": weighted_kendall_tau.statistic,
             }
 
             similarities.append(info)
@@ -53,10 +63,12 @@ def compare_scores(input_paths):
 def main(input_dir, output):
     """Main method for script."""
 
-    input_paths = Path(input_dir).resolve().glob("*/importances/*.json")
+    input_paths = Path(input_dir).resolve().glob("*/importances/*.csv")
     output_path = Path(output).resolve()
 
-    results = compare_scores(input_paths)
+    dataset_to_type = get_dataset_to_type("../data/datasets.json")
+
+    results = compare_scores(input_paths, dataset_to_type)
 
     results.to_csv(output_path, index=False)
 

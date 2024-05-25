@@ -201,9 +201,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Download datasets, train models, and calculate PDP and ICE plots.",
     )
-    parser.add_argument(
-        "-d", "--debug", action="store_true", help="run on debug datasets"
-    )
+    parser.add_argument("-g", "--group", choices=["big", "small"], help="dataset group")
     parser.add_argument("-i", "--index", help="dataset index", type=int)
     parser.add_argument("-o", "--output", default=".", help="output directory")
     parser.add_argument(
@@ -211,6 +209,4 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    DATASET_GROUP = "debug" if args.debug else "actual"
-
-    main(DATASET_GROUP, args.index, args.output, args.jobs)
+    main(args.group, args.index, args.output, args.jobs)

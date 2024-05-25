@@ -52,9 +52,7 @@ if __name__ == "__main__":
         description="Combine all PDPs into one file.",
     )
 
-    parser.add_argument(
-        "-d", "--debug", action="store_true", help="run on debug datasets"
-    )
+    parser.add_argument("-g", "--group", choices=["big", "small"], help="dataset group")
     parser.add_argument(
         "-i", "--input", default="./results", help="input results directory"
     )
@@ -62,6 +60,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    DATASET_GROUP = "debug" if args.debug else "actual"
-
-    main(DATASET_GROUP, args.input, args.output)
+    main(args.group, args.input, args.output)

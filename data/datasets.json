@@ -1,36 +1,41 @@
 {
-  "debug": [
+  "small": [
     {
       "name": "522_pm10",
       "objective": "regression",
+      "type": "real",
       "nominal_features": [],
       "exclude_features": [],
-      "url": "https://github.com/EpistasisLab/pmlb/blob/master/datasets/522_pm10/metadata.yaml"
+      "url": "http://lib.stat.cmu.edu/datasets/"
     },
     {
       "name": "547_no2",
       "objective": "regression",
+      "type": "real",
       "nominal_features": [],
       "exclude_features": [],
-      "url": "https://github.com/EpistasisLab/pmlb/blob/master/datasets/547_no2/metadata.yaml"
+      "url": "http://lib.stat.cmu.edu/datasets/"
     },
     {
       "name": "583_fri_c1_1000_50",
       "objective": "regression",
+      "type": "synthetic",
       "nominal_features": [],
       "exclude_features": [],
-      "url": "https://github.com/EpistasisLab/pmlb/blob/master/datasets/583_fri_c1_1000_50/metadata.yaml"
+      "url": "https://www.openml.org/search?type=data&status=active&id=583"
     },
     {
       "name": "666_rmftsa_ladata",
       "objective": "regression",
+      "type": "real",
       "nominal_features": [],
       "exclude_features": [],
-      "url": "https://github.com/EpistasisLab/pmlb/blob/master/datasets/666_rmftsa_ladata/metadata.yaml"
+      "url": "http://lib.stat.cmu.edu/datasets/"
     },
     {
       "name": "breast_w",
       "objective": "binary",
+      "type": "real",
       "nominal_features": [],
       "exclude_features": [],
       "url": "https://archive.ics.uci.edu/dataset/15/breast+cancer+wisconsin+original"
@@ -38,6 +43,7 @@
     {
       "name": "crx",
       "objective": "binary",
+      "type": "real",
       "nominal_features": [
         "A1",
         "A4",
@@ -55,6 +61,7 @@
     {
       "name": "GAMETES_Epistasis_3_Way_20atts_0.2H_EDM_1_1",
       "objective": "binary",
+      "type": "synthetic",
       "nominal_features": [
         "N0",
         "N1",
@@ -83,6 +90,7 @@
     {
       "name": "irish",
       "objective": "binary",
+      "type": "real",
       "nominal_features": ["Sex", "Educational_level", "Type_school"],
       "exclude_features": [],
       "url": "http://lib.stat.cmu.edu/datasets/irish.ed"
@@ -90,6 +98,7 @@
     {
       "name": "monk1",
       "objective": "binary",
+      "type": "synthetic",
       "nominal_features": [
         "Head shape",
         "Body shape",
@@ -104,6 +113,7 @@
     {
       "name": "monk2",
       "objective": "binary",
+      "type": "synthetic",
       "nominal_features": [
         "attribute#1",
         "attribute#2",
@@ -118,6 +128,7 @@
     {
       "name": "monk3",
       "objective": "binary",
+      "type": "synthetic",
       "nominal_features": [
         "Head shape",
         "Body shape",
@@ -132,6 +143,7 @@
     {
       "name": "pima",
       "objective": "binary",
+      "type": "real",
       "nominal_features": [],
       "exclude_features": [],
       "url": "https://www.kaggle.com/datasets/uciml/pima-indians-diabetes-database/data"
@@ -139,6 +151,7 @@
     {
       "name": "profb",
       "objective": "binary",
+      "type": "real",
       "nominal_features": [
         "Overtime",
         "Favorite_Name",
@@ -151,6 +164,7 @@
     {
       "name": "threeOf9",
       "objective": "binary",
+      "type": "synthetic",
       "nominal_features": [
         "F1",
         "F2",
@@ -168,6 +182,7 @@
     {
       "name": "tic_tac_toe",
       "objective": "binary",
+      "type": "synthetic",
       "nominal_features": [
         "t1",
         "t2",
@@ -180,11 +195,12 @@
         "t9"
       ],
       "exclude_features": [],
-      "url": "https://github.com/EpistasisLab/pmlb/blob/master/datasets/tic_tac_toe/metadata.yaml"
+      "url": "https://archive.ics.uci.edu/dataset/101/tic+tac+toe+endgame"
     },
     {
       "name": "tokyo1",
       "objective": "binary",
+      "type": "real",
       "nominal_features": [],
       "exclude_features": ["io_namei", "net_frac_busy", "io_lwrite"],
       "url": "https://www.openml.org/search?type=data&sort=version&status=any&order=asc&exact_name=tokyo1&id=40705"
@@ -192,6 +208,7 @@
     {
       "name": "wdbc",
       "objective": "binary",
+      "type": "real",
       "nominal_features": [],
       "exclude_features": [],
       "url": "https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic"
@@ -199,6 +216,7 @@
     {
       "name": "xd6",
       "objective": "binary",
+      "type": "synthetic",
       "nominal_features": [
         "Attribute 1",
         "Attribute 2",
@@ -211,13 +229,14 @@
         "Attribute 9"
       ],
       "exclude_features": [],
-      "url": "https://github.com/EpistasisLab/pmlb/blob/master/datasets/xd6/metadata.yaml"
+      "url": "https://link.springer.com/article/10.1023/A:1022686419106"
     }
   ],
-  "actual": [
+  "big": [
     {
       "name": "1191_BNG_pbc",
       "objective": "regression",
+      "type": "synthetic",
       "nominal_features": ["D", "Z1", "Z3", "Z4", "Z5", "Z6", "Z7", "Z17"],
       "exclude_features": [],
       "url": "https://www.openml.org/search?type=data&status=active&id=1191"
@@ -225,6 +244,7 @@
     {
       "name": "1193_BNG_lowbwt",
       "objective": "regression",
+      "type": "synthetic",
       "nominal_features": ["LOW", "RACE", "SMOKE", "PTL", "HT", "UI", "FTV"],
       "exclude_features": [],
       "url": "https://www.openml.org/search?type=data&status=active&id=1193"
@@ -232,6 +252,7 @@
     {
       "name": "1196_BNG_pharynx",
       "objective": "regression",
+      "type": "synthetic",
       "nominal_features": [
         "Inst",
         "sex",
@@ -249,6 +270,7 @@
     {
       "name": "1199_BNG_echoMonths",
       "objective": "regression",
+      "type": "synthetic",
       "nominal_features": ["still_alive", "pericardial", "alive_at_1"],
       "exclude_features": [],
       "url": "https://api.openml.org/d/1199"
@@ -256,6 +278,7 @@
     {
       "name": "1201_BNG_breastTumor",
       "objective": "regression",
+      "type": "synthetic",
       "nominal_features": [
         "menopause",
         "node-caps",
@@ -270,6 +293,7 @@
     {
       "name": "1203_BNG_pwLinear",
       "objective": "regression",
+      "type": "synthetic",
       "nominal_features": [
         "a1",
         "a2",
@@ -288,6 +312,7 @@
     {
       "name": "197_cpu_act",
       "objective": "regression",
+      "type": "real",
       "nominal_features": [],
       "exclude_features": [],
       "url": "http://www.cs.toronto.edu/~delve/data/comp-activ/compActivDetail.html"
@@ -295,6 +320,7 @@
     {
       "name": "215_2dplanes",
       "objective": "regression",
+      "type": "synthetic",
       "nominal_features": ["x1"],
       "exclude_features": [],
       "url": "https://www.dcc.fc.up.pt/~ltorgo/Regression/2dplanes.html"
@@ -302,6 +328,7 @@
     {
       "name": "225_puma8NH",
       "objective": "regression",
+      "type": "synthetic",
       "nominal_features": [],
       "exclude_features": [],
       "url": "https://www.dcc.fc.up.pt/~ltorgo/Regression/kin.html"
@@ -309,6 +336,7 @@
     {
       "name": "344_mv",
       "objective": "regression",
+      "type": "synthetic",
       "nominal_features": ["x3", "x7", "x8"],
       "exclude_features": [],
       "url": "https://www.dcc.fc.up.pt/~ltorgo/Regression/mv.html"
@@ -316,6 +344,7 @@
     {
       "name": "503_wind",
       "objective": "regression",
+      "type": "real",
       "nominal_features": [],
       "exclude_features": [],
       "url": "https://www.openml.org/search?type=data&status=active&id=503"
@@ -323,6 +352,7 @@
     {
       "name": "529_pollen",
       "objective": "regression",
+      "type": "synthetic",
       "nominal_features": [],
       "exclude_features": [],
       "url": "https://www.openml.org/search?type=data&status=active&id=529"
@@ -330,34 +360,39 @@
     {
       "name": "537_houses",
       "objective": "regression",
+      "type": "real",
       "nominal_features": [],
       "exclude_features": [],
-      "url": "https://github.com/EpistasisLab/pmlb/blob/master/datasets/537_houses/metadata.yaml"
+      "url": "http://lib.stat.cmu.edu/datasets/"
     },
     {
       "name": "564_fried",
       "objective": "regression",
+      "type": "synthetic",
       "nominal_features": [],
       "exclude_features": [],
-      "url": "https://github.com/EpistasisLab/pmlb/blob/master/datasets/564_fried/metadata.yaml"
+      "url": "https://www.openml.org/search?type=data&status=active&id=564"
     },
     {
       "name": "574_house_16H",
       "objective": "regression",
+      "type": "real",
       "nominal_features": [],
       "exclude_features": [],
-      "url": "https://github.com/EpistasisLab/pmlb/blob/master/datasets/564_fried/metadata.yaml"
+      "url": "https://www.openml.org/search?type=data&status=active&id=574"
     },
     {
       "name": "588_fri_c4_1000_100",
       "objective": "regression",
+      "type": "synthetic",
       "nominal_features": [],
       "exclude_features": [],
-      "url": "https://github.com/EpistasisLab/pmlb/blob/master/datasets/588_fri_c4_1000_100/metadata.yaml"
+      "url": "https://www.openml.org/search?type=data&status=active&id=588"
     },
     {
       "name": "adult",
       "objective": "binary",
+      "type": "real",
       "nominal_features": [
         "workclass",
         "education",
@@ -374,6 +409,7 @@
     {
       "name": "banana",
       "objective": "binary",
+      "type": "synthetic",
       "nominal_features": [],
       "exclude_features": [],
       "url": "https://sci2s.ugr.es/keel/dataset.php?cod=182"
@@ -381,6 +417,7 @@
     {
       "name": "chess",
       "objective": "binary",
+      "type": "synthetic",
       "nominal_features": [
         "A00",
         "A01",
@@ -425,6 +462,7 @@
     {
       "name": "churn",
       "objective": "binary",
+      "type": "real",
       "nominal_features": [
         "state",
         "area code",
@@ -437,6 +475,7 @@
     {
       "name": "clean2",
       "objective": "binary",
+      "type": "real",
       "nominal_features": [],
       "exclude_features": ["molecule_name", "conformation_name"],
       "url": "https://www.openml.org/search?type=data&sort=runs&id=40666&status=active"
@@ -444,6 +483,7 @@
     {
       "name": "coil2000",
       "objective": "binary",
+      "type": "real",
       "nominal_features": ["MOSTYPE", "MOSHOOFD"],
       "exclude_features": [],
       "url": "https://archive.ics.uci.edu/dataset/125/insurance+company+benchmark+coil+2000"
@@ -451,6 +491,7 @@
     {
       "name": "dis",
       "objective": "binary",
+      "type": "real",
       "nominal_features": [
         "sex",
         "on thyroxine",
@@ -481,6 +522,7 @@
     {
       "name": "GAMETES_Epistasis_2_Way_20atts_0.1H_EDM_1_1",
       "objective": "binary",
+      "type": "synthetic",
       "nominal_features": [
         "N0",
         "N1",
@@ -509,6 +551,7 @@
     {
       "name": "GAMETES_Heterogeneity_20atts_1600_Het_0.4_0.2_50_EDM_2_001",
       "objective": "binary",
+      "type": "synthetic",
       "nominal_features": [
         "N0",
         "N1",
@@ -537,6 +580,7 @@
     {
       "name": "german",
       "objective": "binary",
+      "type": "real",
       "nominal_features": [
         "Status",
         "Credit-history",
@@ -556,6 +600,7 @@
     {
       "name": "Hill_Valley_with_noise",
       "objective": "binary",
+      "type": "synthetic",
       "nominal_features": [],
       "exclude_features": [],
       "url": "https://archive.ics.uci.edu/dataset/166/hill+valley"
@@ -563,6 +608,7 @@
     {
       "name": "hypothyroid",
       "objective": "binary",
+      "type": "real",
       "nominal_features": [
         "sex",
         "on_thyroxine",
@@ -589,6 +635,7 @@
     {
       "name": "magic",
       "objective": "binary",
+      "type": "synthetic",
       "nominal_features": [],
       "exclude_features": [],
       "url": "https://archive.ics.uci.edu/dataset/159/magic+gamma+telescope"
@@ -596,6 +643,7 @@
     {
       "name": "mofn_3_7_10",
       "objective": "binary",
+      "type": "synthetic",
       "nominal_features": [
         "Bit-0",
         "Bit-1",
@@ -614,6 +662,7 @@
     {
       "name": "mushroom",
       "objective": "binary",
+      "type": "real",
       "nominal_features": [
         "cap-shape",
         "cap-surface",
@@ -644,6 +693,7 @@
     {
       "name": "parity5+5",
       "objective": "binary",
+      "type": "synthetic",
       "nominal_features": [
         "Bit 1",
         "Bit 2",
@@ -662,13 +712,15 @@
     {
       "name": "phoneme",
       "objective": "binary",
+      "type": "real",
       "nominal_features": [],
       "exclude_features": [],
-      "url": "https://github.com/EpistasisLab/pmlb/blob/master/datasets/phoneme/metadata.yaml"
+      "url": "https://www.openml.org/search?type=data&status=active&id=1489"
     },
     {
       "name": "ring",
       "objective": "binary",
+      "type": "synthetic",
       "nominal_features": [],
       "exclude_features": [],
       "url": "https://github.com/EpistasisLab/pmlb/blob/master/datasets/ring/metadata.yaml"
@@ -676,6 +728,7 @@
     {
       "name": "spambase",
       "objective": "binary",
+      "type": "real",
       "nominal_features": [],
       "exclude_features": [],
       "url": "https://archive.ics.uci.edu/dataset/94/spambase"
@@ -683,6 +736,7 @@
     {
       "name": "titanic",
       "objective": "binary",
+      "type": "real",
       "nominal_features": ["gender", "class", "embarked", "country"],
       "exclude_features": [],
       "url": "https://github.com/EpistasisLab/pmlb/blob/master/datasets/titanic/metadata.yaml"
@@ -690,6 +744,7 @@
     {
       "name": "twonorm",
       "objective": "binary",
+      "type": "synthetic",
       "nominal_features": [],
       "exclude_features": [],
       "url": "http://www.cs.toronto.edu/~delve/data/twonorm/desc.html"

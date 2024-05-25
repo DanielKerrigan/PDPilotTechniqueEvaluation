@@ -112,7 +112,7 @@ def nested_cross_validation(
         params.append(booster.params)
         folds.append(i + 1)
 
-    df_scores = pd.DataFrame({"fold": scores, "score": scores})
+    df_scores = pd.DataFrame({"fold": folds, "score": scores})
 
     return {
         "scores": df_scores,
