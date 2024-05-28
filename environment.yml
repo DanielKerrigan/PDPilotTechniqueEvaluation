@@ -8,7 +8,7 @@ dependencies:
   - notebook
   - scikit-learn
   - nodejs
-  - altair
+  - altair-all
   - matplotlib
   - lightgbm
   - optuna
@@ -18,4 +18,3 @@ dependencies:
   - pip:
       - pmlb
       - pdpilot==0.5.5
-      - vega_datasets

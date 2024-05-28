@@ -10,4 +10,4 @@
 source /home/kerrigan.d/miniconda3/bin/activate
 conda activate pdpilot-eval
 
-srun python data_models_plots.py -d -i $SLURM_ARRAY_TASK_ID -o /scratch/kerrigan.d/pdpilot/small
+srun python data_models_plots.py -g small -i $SLURM_ARRAY_TASK_ID -o /scratch/kerrigan.d/pdpilot/small
