@@ -5,6 +5,7 @@ data/results
 scratch
 clustering/results
 filtering/results
+filtering/filtering_models_data
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

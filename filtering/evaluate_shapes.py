@@ -38,7 +38,7 @@ def get_shape(curve, t):
 
 
 def calculate_num_correct(labels_a, labels_b):
-    """Get accuracy between two sets of labels"""
+    """Get number of agreements between two lists of labels"""
 
     assert len(labels_a) == len(labels_b)
 
@@ -180,6 +180,8 @@ def set_consensus_labels(curves_consensus, labels_a, labels_b, corrections):
             assert i == curve["index"]
             curve["shape"] = new_label
             correction_index += 1
+        else:
+            assert a == b == curve["shape"]
 
 
 def plot_label_counts(labels_a, labels_b):

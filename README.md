@@ -10,6 +10,8 @@ This repository contains code and data for evaluating techniques in [PDPilot](ht
 - [filtering](filtering): Analyzing the effect of the tolerance parameter for filtering PDPs by shape.
 - [tool](tool): Web app for labeling the shape of PDPs.
 - [environment.yml](environment.yml): conda environment file.
+- [local-requirements.txt](local-requirements.txt): Exact versions of all packages that were used locally on my Mac.
+- [cluster-requirements.txt](cluster-requirements.txt): Exact versions of all packages that were used on the Linux cluster.
 
 ## Installation
 

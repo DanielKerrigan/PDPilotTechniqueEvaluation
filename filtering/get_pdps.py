@@ -19,7 +19,11 @@ def get_pdps(pdpilot_paths):
 
         for owp in pd_data["one_way_pds"]:
             # only ordered features and non-flat PDs
-            if owp["ordered"] and owp["ice"]["num_clusters"] > 1:
+            if (
+                owp["ordered"]
+                and owp["ice"]["num_clusters"] > 1
+                and len(owp["x_values"]) > 2
+            ):
                 pdp = {
                     "index": len(pdps),
                     "dataset": pd_path.stem,
@@ -33,15 +37,15 @@ def get_pdps(pdpilot_paths):
     return pdps
 
 
-def main(dataset_group, input_dir, output):
+def main(input_dir, output):
     """Main method for script."""
 
-    input_path = Path(input_dir).resolve() / dataset_group / "pdpilot"
+    input_path = Path(input_dir).resolve() / "pdpilot"
     output_path = Path(output).resolve()
 
     datasets = json.loads(Path("../data/datasets.json").read_bytes())
 
-    pdpilot_paths = [input_path / f"{x['name']}.json" for x in datasets[dataset_group]]
+    pdpilot_paths = [input_path / f"{x['name']}.json" for x in datasets["small"]]
 
     pdps = get_pdps(pdpilot_paths)
     output_path.write_text(json.dumps(pdps), encoding="UTF-8")
@@ -52,12 +56,14 @@ if __name__ == "__main__":
         description="Combine all PDPs into one file.",
     )
 
-    parser.add_argument("-g", "--group", choices=["big", "small"], help="dataset group")
     parser.add_argument(
-        "-i", "--input", default="./results", help="input results directory"
+        "-i",
+        "--input",
+        default="./filtering_models_data",
+        help="input results directory",
     )
     parser.add_argument("-o", "--output", default="pdps.json", help="output path")
 
     args = parser.parse_args()
 
-    main(args.group, args.input, args.output)
+    main(args.input, args.output)

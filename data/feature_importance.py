@@ -12,7 +12,7 @@ def get_shap_importance(booster, df):
     return dict(zip(df.columns, np.abs(shap_values.values).mean(axis=0)))
 
 
-def get_permuation_importance(booster, df_original, y, objective, trials=10):
+def get_permutation_importance(booster, df_original, y, objective, trials=10):
     """Calculate permutation feature importance."""
 
     importances = {}
@@ -53,7 +53,7 @@ def get_feature_importance(booster, df, y, pd_path, objective):
         )
     )
 
-    permutation_scores = get_permuation_importance(booster, df, y, objective)
+    permutation_scores = get_permutation_importance(booster, df, y, objective)
 
     shap_importances = get_shap_importance(booster, df)
 
