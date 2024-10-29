@@ -1,8 +1,9 @@
-from gbm import score
 import json
-import shap
+
 import numpy as np
 import pandas as pd
+import shap
+from gbm import score
 
 
 def get_shap_importance(booster, df):

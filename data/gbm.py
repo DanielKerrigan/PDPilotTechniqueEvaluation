@@ -1,11 +1,11 @@
 """Training and evaluating LightGBM models."""
 
+import lightgbm as lgb
 import numpy as np
 import pandas as pd
-import lightgbm as lgb
 from optuna.integration.lightgbm import LightGBMTunerCV
+from sklearn.metrics import log_loss, mean_squared_error
 from sklearn.model_selection import KFold, StratifiedKFold
-from sklearn.metrics import mean_squared_error, log_loss
 
 
 def score(y_true, y_pred, objective):

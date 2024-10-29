@@ -3,9 +3,10 @@
 import argparse
 import json
 from pathlib import Path
+
 import numpy as np
-from sklearn.utils import shuffle
 from sklearn.decomposition import PCA
+from sklearn.utils import shuffle
 
 
 def fit_pca(real_ice_lines):

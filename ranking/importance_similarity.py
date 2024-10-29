@@ -2,8 +2,8 @@
 
 import argparse
 import json
-from pathlib import Path
 from itertools import combinations
+from pathlib import Path
 
 import pandas as pd
 from scipy import stats

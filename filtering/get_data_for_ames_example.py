@@ -1,8 +1,9 @@
 """Extract the PDPs and shapes from the Ames, Iowa Housing Dataset."""
 
 import argparse
-from pathlib import Path
 import json
+from pathlib import Path
+
 from evaluate_shapes import get_shape
 
 

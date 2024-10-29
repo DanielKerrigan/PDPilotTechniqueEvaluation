@@ -1,19 +1,18 @@
 """Download datasets, train models, and calculate PDP and ICE plots."""
 
 import argparse
+import json
 from datetime import datetime
 from pathlib import Path
-import json
 
-from gbm import nested_cross_validation_and_train
-from feature_importance import get_feature_importance
-
-import optuna
-from pmlb import fetch_data
-from sklearn.metrics import mean_squared_error, log_loss
-from sklearn.model_selection import train_test_split
 import numpy as np
+import optuna
+from feature_importance import get_feature_importance
+from gbm import nested_cross_validation_and_train
 from pdpilot import partial_dependence
+from pmlb import fetch_data
+from sklearn.metrics import log_loss, mean_squared_error
+from sklearn.model_selection import train_test_split
 
 
 def sample(df, n, objective):
