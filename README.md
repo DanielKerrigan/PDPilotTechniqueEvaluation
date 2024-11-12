@@ -9,9 +9,11 @@ This repository contains code and data for evaluating techniques in [PDPilot](ht
 - [ranking](ranking): Comparing feature importance rankings.
 - [filtering](filtering): Analyzing the effect of the tolerance parameter for filtering PDPs by shape.
 - [tool](tool): Web app for labeling the shape of PDPs.
+- [cluster-difference](cluster-difference): Analyzing PDPilot's cluster difference metric.
+- [cluster-explanations](cluster-explanations): Analyzing the effect of decision tree depth on ICE plot cluster explanations.
 - [environment.yml](environment.yml): conda environment file.
 - [local-requirements.txt](local-requirements.txt): Exact versions of all packages that were used locally on my Mac.
-- [cluster-requirements.txt](cluster-requirements.txt): Exact versions of all packages that were used on the Linux cluster.
+- [hpc-requirements.txt](hpc-requirements.txt): Exact versions of all packages that were used on the Linux cluster.
 
 ## Installation
 

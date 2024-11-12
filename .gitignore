@@ -1,10 +1,8 @@
 # My additions
 .DS_Store
 .vscode
-data/results
 scratch
-clustering/results
-filtering/results
+results
 filtering/filtering_models_data
 
 # Byte-compiled / optimized / DLL files
