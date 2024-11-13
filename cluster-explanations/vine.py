@@ -192,6 +192,7 @@ def _get_model_split(columns, model):
 # main function - run this to export JSON file for vis
 # CHANGE: Separating the calculation of the data from
 # exporting it to a JSON file.
+# CHANGE: add merge_clusters parameter
 def calculate(
     data,
     y,
@@ -201,6 +202,7 @@ def calculate(
     ice_curves_to_export=100,
     cluster_method="good",
     prune_clusters=True,
+    merge_clusters=True,
     seed=1,
 ):
     # CHANGE: create random number generator
@@ -307,18 +309,20 @@ def calculate(
 
         # loop through splits to find duplicates
         duplicate_splits = {}
-        for i, split_def in enumerate(splits_first_pass[:-1]):
-            for j, split_def_2 in enumerate(splits_first_pass):
-                if j <= i or i in duplicate_splits or j in duplicate_splits:
-                    continue
-                elif (
-                    split_def["feature"] == split_def_2["feature"]
-                    and split_def["direction"] == split_def_2["direction"]
-                    and (split_def["val"] - split_def_2["val"])
-                    / (np.ptp(data.loc[:, split_def["feature"]]))
-                    <= 0.1
-                ):
-                    duplicate_splits[j] = i
+        # CHANGE: add option to not merge clusters
+        if merge_clusters:
+            for i, split_def in enumerate(splits_first_pass[:-1]):
+                for j, split_def_2 in enumerate(splits_first_pass):
+                    if j <= i or i in duplicate_splits or j in duplicate_splits:
+                        continue
+                    elif (
+                        split_def["feature"] == split_def_2["feature"]
+                        and split_def["direction"] == split_def_2["direction"]
+                        and (split_def["val"] - split_def_2["val"])
+                        / (np.ptp(data.loc[:, split_def["feature"]]))
+                        <= 0.1
+                    ):
+                        duplicate_splits[j] = i
 
         # CHANGE: When using a nested dict for `to_replace`, the `value`
         # parameter cannot be set. Previously, it was set to `None`.
@@ -460,6 +464,7 @@ def calculate_and_export(
     ice_curves_to_export=100,
     cluster_method="good",
     prune_clusters=True,
+    merge_clusters=True,
     seed=1,
     output_path="static/data.json",
 ):
@@ -472,6 +477,7 @@ def calculate_and_export(
         ice_curves_to_export=ice_curves_to_export,
         cluster_method=cluster_method,
         prune_clusters=prune_clusters,
+        merge_clusters=merge_clusters,
         seed=seed,
     )
 
