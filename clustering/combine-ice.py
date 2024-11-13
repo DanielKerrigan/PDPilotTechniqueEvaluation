@@ -36,7 +36,7 @@ def main(input_dir, output_path, include_flat=True):
 
                 # optionally filter out ICE lines that are flat
                 if not include_flat:
-                    not_flat = np.sum(np.diff(lines), axis=1) != 0
+                    not_flat = ~np.isclose(np.ptp(lines, axis=1), 0)
                     lines = lines[not_flat]
 
                 # globally normalize all ICE lines in this dataset to be between 0 and 1
