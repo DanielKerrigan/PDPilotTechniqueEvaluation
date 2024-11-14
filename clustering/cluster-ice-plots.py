@@ -28,11 +28,17 @@ def cluster_lines(
         lines_to_cluster = centered_ice_lines
     elif cluster_preprocessing == "mean":
         lines_to_cluster = ice_lines - ice_lines.mean(axis=1, keepdims=True)
+    elif cluster_preprocessing == "none":
+        lines_to_cluster = ice_lines
+    else:
+        raise ValueError(f"unknown preprocessing {cluster_preprocessing}")
 
     distances = euclidean_distances(lines_to_cluster, lines_to_cluster)
 
     best_score = -math.inf
     best_labels = []
+
+    # the clustering code is adapted from PDPilot
 
     for n_clusters in range(2, 6):
         cluster_model = KMeans(
@@ -51,8 +57,13 @@ def cluster_lines(
 
         labels = cluster_model.labels_
 
-        if len(np.unique(labels)) < n_clusters:
+        n_clusters_found = len(np.unique(labels))
+        if n_clusters_found < n_clusters:
+            print(f"Only {n_clusters_found} found instead of {n_clusters}")
+            # if best_labels is not set, then n_clusters is 2 and the plot
+            # has no clusters. no need to try higher number of clusters.
             if not best_labels:
+                assert n_clusters == 2
                 best_labels = labels
             break
 
@@ -65,14 +76,13 @@ def cluster_lines(
     return best_labels
 
 
-def main(input_path, output_dir, method_index):
+def main(input_path, output_dir, cluster_preprocessing):
     "Cluster ICE plots with the given preprocessing."
-
-    methods = ["diff", "cice", "mean"]
-    cluster_preprocessing = methods[method_index]
 
     input_path = Path(input_path).resolve()
     output_path = Path(output_dir).resolve() / f"{cluster_preprocessing}.json"
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
 
     ice_plots = json.loads(input_path.read_bytes())
 
@@ -99,14 +109,18 @@ if __name__ == "__main__":
     parser.add_argument(
         "-i",
         "--input",
-        default="./scratch/synthetic-ice.json",
+        default="./results/synthetic-ice.json",
         help="path to ICE lines",
     )
     parser.add_argument(
-        "-o", "--output", default="./scratch/clusters", help="output directory"
+        "-o", "--output", default="./results/clusters", help="output directory"
     )
     parser.add_argument(
-        "-m", "--method", choices=[0, 1, 2], type=int, help="preprocessing method"
+        "-m",
+        "--method",
+        choices=["diff", "cice", "mean", "none"],
+        type=str,
+        help="preprocessing method",
     )
     args = parser.parse_args()
 

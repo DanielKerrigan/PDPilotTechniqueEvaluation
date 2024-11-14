@@ -25,6 +25,7 @@ def generate_synthetic_ice_plot(
 
     clusters = []
 
+    # repeat 0 cluster_sizes[0] times, 1 cluster_sizes[1] times, etc.
     labels = np.repeat(np.arange(len(cluster_sizes)), cluster_sizes)
 
     for cluster_size in cluster_sizes:
@@ -81,11 +82,11 @@ if __name__ == "__main__":
     parser.add_argument(
         "-i",
         "--input",
-        default="./scratch/real-ice.json",
+        default="./results/real-ice.json",
         help="path to ICE lines",
     )
     parser.add_argument(
-        "-o", "--output", default="./scratch/synthetic-ice.json", help="output path"
+        "-o", "--output", default="./results/synthetic-ice.json", help="output path"
     )
     parser.add_argument(
         "-n",

@@ -13,6 +13,8 @@ def main(input_dir, output_path, include_flat=True):
     input_paths = Path(input_dir).resolve().glob("*/pdpilot/*.json")
     output_path = Path(output_path).resolve()
 
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
     data = []
 
     feature_count = 0
@@ -57,7 +59,7 @@ if __name__ == "__main__":
         help="path to datasets, models, and PDPilot data.",
     )
     parser.add_argument(
-        "-o", "--output", default="./scratch/real-ice.json", help="output path"
+        "-o", "--output", default="./results/real-ice.json", help="output path"
     )
     args = parser.parse_args()
 

@@ -14,6 +14,7 @@ In more detail, to create a synthetic ICE plot, we get a random starting point b
 - [generate-ice-plots.py](generate-ice-plots.py): Use PCA to generate synthetic ICE plots.
 - [cluster-ice-plots.py](cluster-ice-plots.py): Cluster all ICE plots using the given preprocessing method.
 - [score-methods.py](score-methods.py): Calculate the adjusted Rand index for each preprocessing method and synthetic ICE plot.
+- [run-all.sh](run-all.sh): Run the above four scripts.
 - [analyze-results.ipynb](analyze-results.ipynb): Calculate the mean and standard deviation of the adjusted Rand index for each preprocessing step.
 - [view-synthetic-ice-plots.ipynb](view-synthetic-ice-plots.ipynb): Visualize the synthetic ICE plots and their clusters.
 - [explore-pca.ipynb](explore-pca.ipynb): Explore the generated plots when modifying `between_deviation` and `within_deviation`.

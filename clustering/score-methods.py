@@ -17,7 +17,7 @@ def main(ice_path, cluster_dir, output_path):
 
     all_true_labels = [plot["labels"] for plot in json.loads(ice_path.read_bytes())]
 
-    cluster_paths = cluster_dir.glob("*.json")
+    cluster_paths = list(cluster_dir.glob("*.json"))
     method_to_clusters = {
         path.stem: json.loads(path.read_bytes()) for path in cluster_paths
     }
@@ -52,17 +52,17 @@ if __name__ == "__main__":
     parser.add_argument(
         "-i",
         "--ice_path",
-        default="./scratch/synthetic-ice.json",
+        default="./results/synthetic-ice.json",
         help="path to ICE lines",
     )
     parser.add_argument(
         "-c",
         "--cluster_dir",
-        default="./scratch/clusters",
+        default="./results/clusters",
         help="clustering results directory",
     )
     parser.add_argument(
-        "-o", "--output_path", default="./scratch/results.csv", help="output path"
+        "-o", "--output_path", default="./results/results.csv", help="output path"
     )
     args = parser.parse_args()
 
