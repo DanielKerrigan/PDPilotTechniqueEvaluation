@@ -16,4 +16,5 @@ python cluster-ice-plots.py -m mean
 printf "\ncluster ice plots using none\n"
 python cluster-ice-plots.py -m none
 
+printf "\nscore methods\n"
 python score-methods.py

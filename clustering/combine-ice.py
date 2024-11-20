@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 
 
-def main(input_dir, output_path, include_flat=True):
+def main(input_dir, output_path, exclude_flat):
     "Gather all ICE lines into one file."
 
     input_paths = Path(input_dir).resolve().glob("*/pdpilot/*.json")
@@ -27,24 +27,26 @@ def main(input_dir, output_path, include_flat=True):
         lo, hi = pd_data["ice_line_extent"]
 
         for feature, ice_lines in pd_data["feature_to_ice_lines"].items():
-            # only get quantiative features with 20 points in their lines
-            if (
-                len(ice_lines[0]) == 20
-                and pd_data["feature_info"][feature]["kind"] == "quantitative"
-            ):
-                feature_count += 1
-
-                lines = np.array(ice_lines)
+            # only get features with at least 20 points in their lines
+            if len(ice_lines[0]) >= 20:
+                # take the first 20 values in each line
+                lines = np.array(ice_lines)[:, :20]
 
                 # optionally filter out ICE lines that are flat
-                if not include_flat:
+                if exclude_flat:
                     not_flat = ~np.isclose(np.ptp(lines, axis=1), 0)
                     lines = lines[not_flat]
 
-                # globally normalize all ICE lines in this dataset to be between 0 and 1
-                normalized = (lines - lo) / (hi - lo)
+                # if there are still lines after filtering
+                if lines.shape[0] > 0:
+                    feature_count += 1
 
-                data.extend(normalized.tolist())
+                    # globally normalize all ICE lines in this dataset to be between 0 and 1
+                    normalized = (lines - lo) / (hi - lo)
+
+                    data.extend(normalized.tolist())
+                else:
+                    print(f"Flat: dataset={input_path.stem} feature={feature}")
 
     print(f"saving {len(data)} lines across {feature_count} features.")
     output_path.write_text(json.dumps(data), encoding="UTF-8")
@@ -61,6 +63,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-o", "--output", default="./results/real-ice.json", help="output path"
     )
+    parser.add_argument("--exclude_flat", action="store_true")
     args = parser.parse_args()
 
-    main(args.input, args.output)
+    main(args.input, args.output, args.exclude_flat)
