@@ -192,7 +192,7 @@ def _get_model_split(columns, model):
 # main function - run this to export JSON file for vis
 # CHANGE: Separating the calculation of the data from
 # exporting it to a JSON file.
-# CHANGE: add merge_clusters parameter
+# CHANGE: add `merge_clusters` and `seed` parameters
 def calculate(
     data,
     y,
@@ -455,6 +455,7 @@ def export(export_dict, output_path):
 
 # CHANGE: Separating the calculation of the data from
 # exporting it to a JSON file.
+# CHANGE: add `merge_clusters` and `seed` parameters
 def calculate_and_export(
     data,
     y,

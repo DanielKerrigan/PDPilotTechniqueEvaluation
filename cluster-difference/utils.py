@@ -1,5 +1,5 @@
 from collections import defaultdict
-from math import sqrt
+from math import isclose, sqrt
 
 import altair as alt
 import numpy as np
@@ -8,7 +8,7 @@ import pandas as pd
 # DISTANCE METRICS
 
 
-def get_pdpilot_cluster_dist(feature_val, normalize=True):
+def get_pdpilot_cluster_dist(feature_val):
     """
     This code calculates PDPilot's cluster difference metric
     when the input is in the format that VINE uses.
@@ -19,11 +19,8 @@ def get_pdpilot_cluster_dist(feature_val, normalize=True):
 
     for cluster in feature_val["clusters"]:
         centered_cluster_mean = cluster["line"]
-        abs_dist = np.absolute(centered_cluster_mean - centered_pdp)
-        if normalize:
-            cluster_distance += np.mean(abs_dist)
-        else:
-            cluster_distance += np.sum(abs_dist)
+        distance = np.mean(np.absolute(centered_cluster_mean - centered_pdp))
+        cluster_distance += distance
 
     return cluster_distance
 
@@ -95,6 +92,8 @@ def get_scores_for_method(
     n_points = []
     scores = []
 
+    base_score_check = -1.0
+
     for n in range(min_n, max_n + 1):
         x_values = np.linspace(min_x, max_x, n)
 
@@ -118,9 +117,15 @@ def get_scores_for_method(
         n_points.append(n)
         scores.append(score)
 
+        if n == relative_n:
+            base_score_check = score
+
     df = pd.DataFrame({"n_points": n_points, "score": scores, "method": method})
 
     base_score = df[df["n_points"] == relative_n]["score"].to_numpy()[0]
+
+    assert isclose(base_score, base_score_check), f"{base_score} != {base_score_check}"
+
     df["relative_score"] = df["score"] / base_score
 
     return df
@@ -184,6 +189,9 @@ def plot_clustered_ice(feature_val, y_label):
 
 
 def plot_example(x_values, cluster_center_functions, centerings):
+    if not centerings:
+        raise ValueError("centerings is empty")
+
     plots = []
 
     for c in centerings:

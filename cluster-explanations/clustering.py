@@ -85,6 +85,7 @@ def plot_vine_clusters(data, feature, title=None, show_precision_recall=False):
         # loop over the ICE lines in this cluster to create a dataframe for them
         for line_id, curve in enumerate(cluster["individual_ice_curves"]):
             assert resolution == len(curve)
+            assert isinstance(curve[0], float)
             xs.extend(feature_data["x_values"])
             ys.extend(curve)
             instances.extend([line_id] * resolution)

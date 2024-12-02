@@ -1,6 +1,7 @@
 """Determine the threshold that best aligns with the labels."""
 
 import json
+import math
 from pathlib import Path
 
 import altair as alt
@@ -28,6 +29,9 @@ def get_shape(curve, t):
     diff = np.diff(y)
     pos = diff[diff > 0].sum()
     neg = np.abs(diff[diff < 0].sum())
+
+    assert math.isclose(np.abs(diff).sum(), pos + neg)
+
     percent_pos = pos / (pos + neg) if pos + neg != 0 else 0.5
 
     if percent_pos >= (0.5 + t):
@@ -86,8 +90,6 @@ def get_scores(curves):
 def plot_accuracy_vs_threshold(df):
     """Plot line chart that compares accuracy of users's labels and the threshold."""
 
-    # get max accuracy
-
     plot = (
         alt.Chart(df)
         .mark_line()
@@ -135,6 +137,7 @@ def check_labels(curves, heuristic_labels):
 def fix_labels(curves, bad_labels):
     """Correct labeling mistakes that were identified by check_labels."""
     for bl in bad_labels:
+        assert curves[bl["index"]]["index"] == bl["index"]
         curves[bl["index"]]["shape"] = bl["heuristic_label"]
 
 
@@ -179,10 +182,13 @@ def set_consensus_labels(curves_consensus, labels_a, labels_b, corrections):
         if a != b:
             i, new_label = corrections[correction_index]
             assert i == curve["index"]
+            assert new_label == a or new_label == b
             curve["shape"] = new_label
             correction_index += 1
         else:
             assert a == b == curve["shape"]
+
+    assert correction_index == len(corrections)
 
 
 def plot_label_counts(labels_a, labels_b):

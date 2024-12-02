@@ -27,8 +27,11 @@ def main(input_dir, output_path, exclude_flat):
         lo, hi = pd_data["ice_line_extent"]
 
         for feature, ice_lines in pd_data["feature_to_ice_lines"].items():
-            # only get features with at least 20 points in their lines
-            if len(ice_lines[0]) >= 20:
+            # only get quantitative features with at least 20 points in their lines
+            if (
+                len(ice_lines[0]) >= 20
+                and pd_data["feature_info"][feature]["kind"] == "quantitative"
+            ):
                 # take the first 20 values in each line
                 lines = np.array(ice_lines)[:, :20]
 

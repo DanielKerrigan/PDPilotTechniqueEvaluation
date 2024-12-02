@@ -88,6 +88,7 @@ def load_dataset(dataset_info, datasets_dir):
     y = df_reduced["target"].to_numpy()
 
     # drop columns that only have one unique value
+    # https://stackoverflow.com/a/39658662/5016634
     nunique = df_X.nunique()
     df_X.drop(columns=nunique[nunique == 1].index, inplace=True)
 

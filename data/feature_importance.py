@@ -63,6 +63,7 @@ def get_feature_importance(booster, df, y, pd_path, objective):
 
     score_ice = np.array([p["deviation"] for p in pds])
     score_pdp = np.array([np.std(p["mean_predictions"]) for p in pds])
+    # https://github.com/microsoft/LightGBM/issues/2165#issuecomment-491112915
     score_lgb = np.array([lgb_scores[f.replace(" ", "_")] for f in feature])
     score_perm = np.array([permutation_scores[f] for f in feature])
     score_shap = np.array([shap_importances[f] for f in feature])
