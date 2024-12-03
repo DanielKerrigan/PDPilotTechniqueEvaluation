@@ -11,13 +11,12 @@ This repository contains code and data for evaluating techniques in [PDPilot](ht
 - [tool](tool): Web app for labeling the shape of PDPs.
 - [cluster-difference](cluster-difference): Analyzing PDPilot's cluster difference metric.
 - [cluster-explanations](cluster-explanations): Analyzing the effect of decision tree depth on ICE plot cluster explanations.
-- [environment.yml](environment.yml): conda environment file.
-- [local-requirements.txt](local-requirements.txt): Exact versions of all packages that were used locally on my Mac.
-- [hpc-requirements.txt](hpc-requirements.txt): Exact versions of all packages that were used on the Linux cluster.
+- [local-environment.yml](local-environment.yml) and [local-requirements.txt](local-requirements.txt): Conda environment file and exact versions of all packages that were used locally on my Mac.
+- [hpc-environment.yml](hpc-environment.yml) and [hpc-requirements.txt](hpc-requirements.txt): Conda environment file and exact versions of all packages that were used on the Linux cluster.
 
 ## Installation
 
 ```
-conda env create -f environment.yml
+conda env create -f local-environment.yml
 conda activate pdpilot-eval
 ```
